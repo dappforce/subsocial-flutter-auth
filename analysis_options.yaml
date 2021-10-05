@@ -2,7 +2,11 @@ include: package:lint/analysis_options_package.yaml
 
 # Additional information about this file can be found at
 # https://dart.dev/guides/language/analysis-options
-
+analyzer:
+  exclude:
+    - packages/**
+    - "**/*.g.dart"
+    - "**/*.freezed.dart"
 linter:
   rules:
     # ------ Disable individual rules ----- #
