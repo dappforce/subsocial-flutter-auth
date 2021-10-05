@@ -3,12 +3,18 @@ import 'dart:typed_data';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/foundation.dart' show compute;
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:pointycastle/key_derivators/argon2.dart';
-import 'package:pointycastle/pointycastle.dart';
+import 'package:pointycastle/key_derivators/argon2.dart'
+    show Argon2BytesGenerator;
+import 'package:pointycastle/pointycastle.dart' show Argon2Parameters;
 
 /// [Crypto] class contains cryptographic operations used in this package.
 /// All operations are done in another isolate to not block the UI isolate.
 class Crypto {
+  /// Generates random [Uint8List] of length [length].
+  Uint8List generateRandomBytes(int length) {
+    return SecureRandom(length).bytes;
+  }
+
   /// Hash the given [plain] bytes with [salt] to the desired [outputLength]
   /// Algorithm used: ARGON2id
   Future<Uint8List> hash({
