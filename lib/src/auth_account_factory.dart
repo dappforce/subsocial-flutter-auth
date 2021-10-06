@@ -51,7 +51,7 @@ class AccountSecretFactory {
     final encryptionKey = await _derivationStrategy.driveKey(
       _encryptionKeyLength,
       password,
-      passwordSalt,
+      encryptionKeySalt,
     );
     final encryptedSuri = await _crypto.encrypt(
       key: encryptionKey,
