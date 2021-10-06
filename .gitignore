@@ -1,7 +1,7 @@
 packages/subsocial/
 .flutter-plugins
 .flutter-plugins-dependencies
-test_data/hive/
+test_data/
 
 # See https://www.dartlang.org/guides/libraries/private-files
 

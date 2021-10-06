@@ -2,7 +2,8 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:path/path.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:state_notifier/state_notifier.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_factory.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
@@ -10,9 +11,8 @@ import 'package:subsocial_flutter_auth/src/crypto.dart';
 import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
+import 'package:subsocial_flutter_auth/src/sembast_auth_account.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
-
-import 'hive_auth_account_store.dart';
 
 /// [SubsocialAuth] manages subsocial accounts.
 class SubsocialAuth extends StateNotifier<AuthState> {
@@ -49,10 +49,10 @@ class SubsocialAuth extends StateNotifier<AuthState> {
     final _derivationStrategy =
         derivationStrategy ?? KeyDerivationStrategy(_crypto);
 
+    final appDir = await getApplicationDocumentsDirectory();
     final _accountStore = accountStore ??
-        HiveAuthAccountStore(
-          'subsocial_auth_accounts',
-          await SharedPreferences.getInstance(),
+        SembastAuthAccountStore(
+          join(appDir.path, 'subsocial_auth_accounts'),
         );
 
     final _accountSecretFactory = accountSecretFactory ??

@@ -11,6 +11,10 @@ import 'mocks.dart';
 void main() {
   final mockSdk = MockSubsocial();
   setUp(() {
+    final pathProviderMock = MockPathProviderPlatform.setUp();
+    when(() => pathProviderMock.getApplicationDocumentsPath())
+        .thenAnswer((_) async => './test_data');
+
     Hive.init('./test_data/hive');
     reset(mockSdk);
     SharedPreferences.setMockInitialValues({});

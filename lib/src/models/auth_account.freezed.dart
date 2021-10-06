@@ -13,103 +13,14 @@ T _$identity<T>(T value) => value;
 final _privateConstructorUsedError = UnsupportedError(
     'It seems like you constructed your class using `MyClass._()`. This constructor is only meant to be used by freezed and you are not supposed to need it nor use it.\nPlease check the documentation here for more informations: https://github.com/rrousselGit/freezed#custom-getters-and-methods');
 
-_Dummy _$_DummyFromJson(Map<String, dynamic> json) {
-  return __Dummy.fromJson(json);
-}
-
-/// @nodoc
-class _$_DummyTearOff {
-  const _$_DummyTearOff();
-
-  __Dummy call() {
-    return const __Dummy();
-  }
-
-  _Dummy fromJson(Map<String, Object> json) {
-    return _Dummy.fromJson(json);
-  }
-}
-
-/// @nodoc
-const _$Dummy = _$_DummyTearOff();
-
-/// @nodoc
-mixin _$_Dummy {
-  Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
-}
-
-/// @nodoc
-abstract class _$DummyCopyWith<$Res> {
-  factory _$DummyCopyWith(_Dummy value, $Res Function(_Dummy) then) =
-      __$DummyCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$DummyCopyWithImpl<$Res> implements _$DummyCopyWith<$Res> {
-  __$DummyCopyWithImpl(this._value, this._then);
-
-  final _Dummy _value;
-  // ignore: unused_field
-  final $Res Function(_Dummy) _then;
-}
-
-/// @nodoc
-abstract class _$_DummyCopyWith<$Res> {
-  factory _$_DummyCopyWith(__Dummy value, $Res Function(__Dummy) then) =
-      __$_DummyCopyWithImpl<$Res>;
-}
-
-/// @nodoc
-class __$_DummyCopyWithImpl<$Res> extends __$DummyCopyWithImpl<$Res>
-    implements _$_DummyCopyWith<$Res> {
-  __$_DummyCopyWithImpl(__Dummy _value, $Res Function(__Dummy) _then)
-      : super(_value, (v) => _then(v as __Dummy));
-
-  @override
-  __Dummy get _value => super._value as __Dummy;
-}
-
-/// @nodoc
-@JsonSerializable()
-class _$__Dummy implements __Dummy {
-  const _$__Dummy();
-
-  factory _$__Dummy.fromJson(Map<String, dynamic> json) =>
-      _$$__DummyFromJson(json);
-
-  @override
-  String toString() {
-    return '_Dummy()';
-  }
-
-  @override
-  bool operator ==(dynamic other) {
-    return identical(this, other) || (other is __Dummy);
-  }
-
-  @override
-  int get hashCode => runtimeType.hashCode;
-
-  @override
-  Map<String, dynamic> toJson() {
-    return _$$__DummyToJson(this);
-  }
-}
-
-abstract class __Dummy implements _Dummy {
-  const factory __Dummy() = _$__Dummy;
-
-  factory __Dummy.fromJson(Map<String, dynamic> json) = _$__Dummy.fromJson;
-}
-
 /// @nodoc
 class _$AuthAccountTearOff {
   const _$AuthAccountTearOff();
 
   _AuthAccount call(
-      {@HiveField(0) required String localName,
-      @HiveField(1) required String publicKey,
-      @HiveField(2) required AccountSecret accountSecret}) {
+      {required String localName,
+      required String publicKey,
+      required AccountSecret accountSecret}) {
     return _AuthAccount(
       localName: localName,
       publicKey: publicKey,
@@ -124,15 +35,12 @@ const $AuthAccount = _$AuthAccountTearOff();
 /// @nodoc
 mixin _$AuthAccount {
   /// A name that used only locally to identify the account.
-  @HiveField(0)
   String get localName => throw _privateConstructorUsedError;
 
   /// The public key of this account.
-  @HiveField(1)
   String get publicKey => throw _privateConstructorUsedError;
 
   /// Contains the information used to d/encrypt the suri.
-  @HiveField(2)
   AccountSecret get accountSecret => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -145,10 +53,7 @@ abstract class $AuthAccountCopyWith<$Res> {
   factory $AuthAccountCopyWith(
           AuthAccount value, $Res Function(AuthAccount) then) =
       _$AuthAccountCopyWithImpl<$Res>;
-  $Res call(
-      {@HiveField(0) String localName,
-      @HiveField(1) String publicKey,
-      @HiveField(2) AccountSecret accountSecret});
+  $Res call({String localName, String publicKey, AccountSecret accountSecret});
 
   $AccountSecretCopyWith<$Res> get accountSecret;
 }
@@ -198,10 +103,7 @@ abstract class _$AuthAccountCopyWith<$Res>
           _AuthAccount value, $Res Function(_AuthAccount) then) =
       __$AuthAccountCopyWithImpl<$Res>;
   @override
-  $Res call(
-      {@HiveField(0) String localName,
-      @HiveField(1) String publicKey,
-      @HiveField(2) AccountSecret accountSecret});
+  $Res call({String localName, String publicKey, AccountSecret accountSecret});
 
   @override
   $AccountSecretCopyWith<$Res> get accountSecret;
@@ -242,27 +144,23 @@ class __$AuthAccountCopyWithImpl<$Res> extends _$AuthAccountCopyWithImpl<$Res>
 
 /// @nodoc
 
-@HiveType(typeId: 1)
 class _$_AuthAccount implements _AuthAccount {
   const _$_AuthAccount(
-      {@HiveField(0) required this.localName,
-      @HiveField(1) required this.publicKey,
-      @HiveField(2) required this.accountSecret});
+      {required this.localName,
+      required this.publicKey,
+      required this.accountSecret});
 
   @override
 
   /// A name that used only locally to identify the account.
-  @HiveField(0)
   final String localName;
   @override
 
   /// The public key of this account.
-  @HiveField(1)
   final String publicKey;
   @override
 
   /// Contains the information used to d/encrypt the suri.
-  @HiveField(2)
   final AccountSecret accountSecret;
 
   @override
@@ -300,24 +198,21 @@ class _$_AuthAccount implements _AuthAccount {
 
 abstract class _AuthAccount implements AuthAccount {
   const factory _AuthAccount(
-      {@HiveField(0) required String localName,
-      @HiveField(1) required String publicKey,
-      @HiveField(2) required AccountSecret accountSecret}) = _$_AuthAccount;
+      {required String localName,
+      required String publicKey,
+      required AccountSecret accountSecret}) = _$_AuthAccount;
 
   @override
 
   /// A name that used only locally to identify the account.
-  @HiveField(0)
   String get localName => throw _privateConstructorUsedError;
   @override
 
   /// The public key of this account.
-  @HiveField(1)
   String get publicKey => throw _privateConstructorUsedError;
   @override
 
   /// Contains the information used to d/encrypt the suri.
-  @HiveField(2)
   AccountSecret get accountSecret => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
@@ -330,10 +225,10 @@ class _$AccountSecretTearOff {
   const _$AccountSecretTearOff();
 
   _AccountSecret call(
-      {@HiveField(0) required Uint8List encryptedSuri,
-      @HiveField(1) required Uint8List encryptionKeySalt,
-      @HiveField(2) required Uint8List passwordHash,
-      @HiveField(3) required Uint8List passwordSalt}) {
+      {required Uint8List encryptedSuri,
+      required Uint8List encryptionKeySalt,
+      required Uint8List passwordHash,
+      required Uint8List passwordSalt}) {
     return _AccountSecret(
       encryptedSuri: encryptedSuri,
       encryptionKeySalt: encryptionKeySalt,
@@ -349,19 +244,15 @@ const $AccountSecret = _$AccountSecretTearOff();
 /// @nodoc
 mixin _$AccountSecret {
   /// The encrypted suri.
-  @HiveField(0)
   Uint8List get encryptedSuri => throw _privateConstructorUsedError;
 
   /// Salt used to drive the encryption key from password.
-  @HiveField(1)
   Uint8List get encryptionKeySalt => throw _privateConstructorUsedError;
 
   /// Hash used to verify the password.
-  @HiveField(2)
   Uint8List get passwordHash => throw _privateConstructorUsedError;
 
   /// Salt used to hash the password.
-  @HiveField(3)
   Uint8List get passwordSalt => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -375,10 +266,10 @@ abstract class $AccountSecretCopyWith<$Res> {
           AccountSecret value, $Res Function(AccountSecret) then) =
       _$AccountSecretCopyWithImpl<$Res>;
   $Res call(
-      {@HiveField(0) Uint8List encryptedSuri,
-      @HiveField(1) Uint8List encryptionKeySalt,
-      @HiveField(2) Uint8List passwordHash,
-      @HiveField(3) Uint8List passwordSalt});
+      {Uint8List encryptedSuri,
+      Uint8List encryptionKeySalt,
+      Uint8List passwordHash,
+      Uint8List passwordSalt});
 }
 
 /// @nodoc
@@ -426,10 +317,10 @@ abstract class _$AccountSecretCopyWith<$Res>
       __$AccountSecretCopyWithImpl<$Res>;
   @override
   $Res call(
-      {@HiveField(0) Uint8List encryptedSuri,
-      @HiveField(1) Uint8List encryptionKeySalt,
-      @HiveField(2) Uint8List passwordHash,
-      @HiveField(3) Uint8List passwordSalt});
+      {Uint8List encryptedSuri,
+      Uint8List encryptionKeySalt,
+      Uint8List passwordHash,
+      Uint8List passwordSalt});
 }
 
 /// @nodoc
@@ -473,34 +364,29 @@ class __$AccountSecretCopyWithImpl<$Res>
 
 /// @nodoc
 
-@HiveType(typeId: 2)
 class _$_AccountSecret extends _AccountSecret {
   const _$_AccountSecret(
-      {@HiveField(0) required this.encryptedSuri,
-      @HiveField(1) required this.encryptionKeySalt,
-      @HiveField(2) required this.passwordHash,
-      @HiveField(3) required this.passwordSalt})
+      {required this.encryptedSuri,
+      required this.encryptionKeySalt,
+      required this.passwordHash,
+      required this.passwordSalt})
       : super._();
 
   @override
 
   /// The encrypted suri.
-  @HiveField(0)
   final Uint8List encryptedSuri;
   @override
 
   /// Salt used to drive the encryption key from password.
-  @HiveField(1)
   final Uint8List encryptionKeySalt;
   @override
 
   /// Hash used to verify the password.
-  @HiveField(2)
   final Uint8List passwordHash;
   @override
 
   /// Salt used to hash the password.
-  @HiveField(3)
   final Uint8List passwordSalt;
 
   @override
@@ -542,31 +428,27 @@ class _$_AccountSecret extends _AccountSecret {
 
 abstract class _AccountSecret extends AccountSecret {
   const factory _AccountSecret(
-      {@HiveField(0) required Uint8List encryptedSuri,
-      @HiveField(1) required Uint8List encryptionKeySalt,
-      @HiveField(2) required Uint8List passwordHash,
-      @HiveField(3) required Uint8List passwordSalt}) = _$_AccountSecret;
+      {required Uint8List encryptedSuri,
+      required Uint8List encryptionKeySalt,
+      required Uint8List passwordHash,
+      required Uint8List passwordSalt}) = _$_AccountSecret;
   const _AccountSecret._() : super._();
 
   @override
 
   /// The encrypted suri.
-  @HiveField(0)
   Uint8List get encryptedSuri => throw _privateConstructorUsedError;
   @override
 
   /// Salt used to drive the encryption key from password.
-  @HiveField(1)
   Uint8List get encryptionKeySalt => throw _privateConstructorUsedError;
   @override
 
   /// Hash used to verify the password.
-  @HiveField(2)
   Uint8List get passwordHash => throw _privateConstructorUsedError;
   @override
 
   /// Salt used to hash the password.
-  @HiveField(3)
   Uint8List get passwordSalt => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
