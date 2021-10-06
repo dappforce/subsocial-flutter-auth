@@ -34,30 +34,40 @@ class SubsocialAuth extends StateNotifier<AuthState> {
   }
 
   /// Creates a [SubsocialAuth] with the default configuration.
-  static Future<SubsocialAuth> defaultConfiguration() async {
-    final sdk = await Subsocial.instance;
-    final crypto = Crypto();
-    final derivationStrategy = KeyDerivationStrategy(crypto);
+  static Future<SubsocialAuth> defaultConfiguration({
+    Subsocial? sdk,
+    Crypto? crypto,
+    KeyDerivationStrategy? derivationStrategy,
+    AuthAccountStore? accountStore,
+    AccountSecretFactory? accountSecretFactory,
+    int? encryptionKeyLength,
+  }) async {
+    final _sdk = sdk ?? (await Subsocial.instance);
+    final _crypto = crypto ?? Crypto();
+    final _derivationStrategy =
+        derivationStrategy ?? KeyDerivationStrategy(_crypto);
 
-    final accountStore = AuthAccountStore(
-      'subsocial_auth_accounts',
-      await SharedPreferences.getInstance(),
-    );
+    final _accountStore = accountStore ??
+        AuthAccountStore(
+          'subsocial_auth_accounts',
+          await SharedPreferences.getInstance(),
+        );
 
-    final accountSecretFactory = AccountSecretFactory(
-      crypto,
-      derivationStrategy,
-    );
+    final _accountSecretFactory = accountSecretFactory ??
+        AccountSecretFactory(
+          _crypto,
+          _derivationStrategy,
+        );
 
-    const encryptionKeyLength = 32;
+    final _encryptionKeyLength = encryptionKeyLength ?? 32;
 
     return SubsocialAuth(
-      sdk,
-      crypto,
-      derivationStrategy,
-      accountStore,
-      accountSecretFactory,
-      encryptionKeyLength,
+      _sdk,
+      _crypto,
+      _derivationStrategy,
+      _accountStore,
+      _accountSecretFactory,
+      _encryptionKeyLength,
     );
   }
 
