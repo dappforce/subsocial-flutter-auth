@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:subsocial_flutter_auth/src/crypto.dart';
+import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 
 import 'models/auth_account.dart';
 
@@ -9,13 +10,16 @@ import 'models/auth_account.dart';
 /// [Crypto]
 class AccountSecretFactory {
   final Crypto _crypto;
+  final KeyDerivationStrategy _derivationStrategy;
+
   final int _passwordSaltLength;
   final int _encryptionKeySaltLength;
   final int _encryptionKeyLength;
 
   /// Creates [AccountSecretFactory].
   AccountSecretFactory(
-    this._crypto, {
+    this._crypto,
+    this._derivationStrategy, {
     int passwordSaltLength = 16,
     int encryptionKeySaltLength = 16,
     int encryptionKeyLength = 32,
@@ -44,7 +48,11 @@ class AccountSecretFactory {
     final encryptionKeySalt = _crypto.generateRandomBytes(
       _encryptionKeySaltLength,
     );
-    final encryptionKey = await _driveEncryptionKey(password, passwordSalt);
+    final encryptionKey = await _derivationStrategy.driveKey(
+      _encryptionKeyLength,
+      password,
+      passwordSalt,
+    );
     final encryptedSuri = await _crypto.encrypt(
       key: encryptionKey,
       plain: suri,
@@ -59,14 +67,6 @@ class AccountSecretFactory {
       passwordHash: passwordHash,
       passwordSalt: passwordSalt,
       encryptionKeySalt: encryptionKeySalt,
-    );
-  }
-
-  Future<Uint8List> _driveEncryptionKey(Uint8List password, Uint8List salt) {
-    return _crypto.hash(
-      plain: password,
-      salt: salt,
-      outputLength: _encryptionKeyLength,
     );
   }
 }
