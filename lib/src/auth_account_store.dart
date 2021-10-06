@@ -17,9 +17,15 @@ class AuthAccountStore extends ChangeNotifier {
 
   /// Creates [AuthAccountStore]. Make sure to initialize hive before calling.
   AuthAccountStore(String boxName, this._sharedPreferences) {
+    final authAccountAdapter = AuthAccountAdapter();
+    final accountSecretAdapter = AccountSecretAdapter();
+    if (!Hive.isAdapterRegistered(authAccountAdapter.typeId)) {
+      Hive.registerAdapter(AuthAccountAdapter());
+    }
+    if (!Hive.isAdapterRegistered(accountSecretAdapter.typeId)) {
+      Hive.registerAdapter(AccountSecretAdapter());
+    }
     _authAccountBoxCompleter.complete(Hive.openBox(boxName));
-    Hive.registerAdapter(AuthAccountAdapter(), override: true);
-    Hive.registerAdapter(AccountSecretAdapter(), override: true);
   }
 
   Future<Box<AuthAccount>> get _box => _authAccountBoxCompleter.future;
