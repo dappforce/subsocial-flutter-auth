@@ -29,6 +29,7 @@ dev_dependencies:
   freezed: ^0.14.5
   hive_generator: ^1.1.1
   lint: ^1.7.2
+  mocktail: ^0.1.4
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
