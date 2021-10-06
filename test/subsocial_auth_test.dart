@@ -11,7 +11,7 @@ import 'mocks.dart';
 void main() {
   final mockSdk = MockSubsocial();
   setUp(() {
-    Hive.init('./hive');
+    Hive.init('./test_data/hive');
     reset(mockSdk);
     SharedPreferences.setMockInitialValues({});
   });
