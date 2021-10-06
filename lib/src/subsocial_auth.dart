@@ -12,6 +12,8 @@ import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
 
+import 'hive_auth_account_store.dart';
+
 /// [SubsocialAuth] manages subsocial accounts.
 class SubsocialAuth extends StateNotifier<AuthState> {
   final Subsocial _sdk;
@@ -48,7 +50,7 @@ class SubsocialAuth extends StateNotifier<AuthState> {
         derivationStrategy ?? KeyDerivationStrategy(_crypto);
 
     final _accountStore = accountStore ??
-        AuthAccountStore(
+        HiveAuthAccountStore(
           'subsocial_auth_accounts',
           await SharedPreferences.getInstance(),
         );
