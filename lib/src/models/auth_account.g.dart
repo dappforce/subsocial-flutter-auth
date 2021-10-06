@@ -88,3 +88,12 @@ class AccountSecretAdapter extends TypeAdapter<_$_AccountSecret> {
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }
+
+// **************************************************************************
+// JsonSerializableGenerator
+// **************************************************************************
+
+_$__Dummy _$$__DummyFromJson(Map<String, dynamic> json) => _$__Dummy();
+
+Map<String, dynamic> _$$__DummyToJson(_$__Dummy instance) =>
+    <String, dynamic>{};
