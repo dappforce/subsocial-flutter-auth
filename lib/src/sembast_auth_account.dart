@@ -18,12 +18,22 @@ class SembastAuthAccountStore extends ChangeNotifier
   final _activeAccountStore = StoreRef<int, String>('active_account');
 
   /// Creates [SembastAuthAccountStore].
-  SembastAuthAccountStore(String databasePath) {
-    _databaseCompleter = Completer()..complete(_openDatabase(databasePath));
+  SembastAuthAccountStore(
+    String databasePath, {
+    DatabaseFactory? databaseFactory,
+  }) {
+    _databaseCompleter = Completer()
+      ..complete(_openDatabase(
+        databasePath,
+        databaseFactory: databaseFactory,
+      ));
   }
 
-  static Future<Database> _openDatabase(String dbPath) async {
-    final DatabaseFactory dbFactory = databaseFactoryIo;
+  static Future<Database> _openDatabase(
+    String dbPath, {
+    DatabaseFactory? databaseFactory,
+  }) async {
+    final DatabaseFactory dbFactory = databaseFactory ?? databaseFactoryIo;
     final Database db = await dbFactory.openDatabase(dbPath);
     return db;
   }
