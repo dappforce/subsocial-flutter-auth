@@ -8,7 +8,6 @@ import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sembast/sembast.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
 import 'package:subsocial_flutter_auth/src/subsocial_auth.dart';
@@ -29,7 +28,6 @@ void main() {
         .thenAnswer((_) async => './test_data');
 
     reset(mockSdk);
-    SharedPreferences.setMockInitialValues({});
   });
   tearDown(() async {
     final dbFile = File('./test_data/subsocial_auth_accounts');
