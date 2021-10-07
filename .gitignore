@@ -2,6 +2,7 @@ packages/subsocial/
 .flutter-plugins
 .flutter-plugins-dependencies
 test_data/
+coverage/
 
 # See https://www.dartlang.org/guides/libraries/private-files
 
