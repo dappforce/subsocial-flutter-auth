@@ -362,9 +362,14 @@ void main() {
       password: accPass,
       suri: accSuri,
     );
+    verify(
+      () => mockSdk.importAccount(suri: accSuri),
+    ).called(1);
 
     final resWrongPassword = await auth.setSigner(acc, 'wrong password');
     expect(resWrongPassword, false);
+
+    verifyNever(() => mockSdk.importAccount(suri: any(named: 'suri')));
 
     final resCorrectPassword = await auth.setSigner(acc, accPass);
     expect(resCorrectPassword, true);
