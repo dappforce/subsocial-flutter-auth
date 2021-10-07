@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:state_notifier/state_notifier.dart';
@@ -77,12 +78,24 @@ class SubsocialAuth extends StateNotifier<AuthState> {
   @override
   AuthState get state => super.state;
 
+  /// Used to wait for all update calls to finish
+  @visibleForTesting
+  int updateCallCounter = 0;
+
   /// Updates the current [AuthState]
   Future<AuthState> update() async {
+    assert(() {
+      updateCallCounter++;
+      return true;
+    }(), '');
     state = AuthState(
       activeAccount: await getActiveAccount(),
       accounts: await getAccounts(),
     );
+    assert(() {
+      updateCallCounter--;
+      return true;
+    }(), '');
     return state;
   }
 
