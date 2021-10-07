@@ -1,25 +1,58 @@
+import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:mocktail/mocktail.dart';
+import 'package:sembast/sembast_memory.dart';
+import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
+import 'package:subsocial_flutter_auth/src/sembast_auth_account.dart';
 import 'package:subsocial_flutter_auth/src/subsocial_auth.dart';
 import 'package:subsocial_sdk/generated/def.pb.dart';
 
 import 'mocks.dart';
 
-Future<AuthAccount> importAccountMocked(
+AuthAccountStore getMemoryAuthStore() {
+  return SembastAuthAccountStore(
+    getRandomString(20),
+    databaseFactory: databaseFactoryMemory,
+  );
+}
+
+Future<void> removeAllAccounts(SubsocialAuth auth) async {
+  await Future.wait((await auth.getAccounts()).map((account) async {
+    await auth.removeAccount(account);
+  }));
+}
+
+Future<IList<AuthAccount>> importRandomAccountsMocked(
+  int n,
   SubsocialAuth auth,
   MockSubsocial mockSdk,
-  String localName,
-  String suri,
-  String password,
-) {
+) async {
+  final accounts = <AuthAccount>[];
+  for (var i = 0; i < n; i++) {
+    accounts.add(await importAccountMocked(auth, mockSdk));
+  }
+  return accounts.lock;
+}
+
+Future<AuthAccount> importAccountMocked(
+  SubsocialAuth auth,
+  MockSubsocial mockSdk, {
+  String? localName,
+  String? suri,
+  String? password,
+  String? publicKey,
+}) {
   when(() => mockSdk.importAccount(suri: any(named: 'suri'))).thenAnswer(
     (_) async => ImportedAccount(
-      publicKey: getRandomString(30),
+      publicKey: publicKey ?? getRandomString(30),
     ),
   );
 
   return auth.importAccount(
-      localName: localName, suri: suri, password: password);
+    localName: localName ?? getRandomString(10),
+    suri: suri ?? getRandomString(30),
+    password: password ?? getRandomString(8),
+  );
 }
 
 Future<void> waitForAuthUpdate(SubsocialAuth auth) async {

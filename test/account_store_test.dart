@@ -20,7 +20,7 @@ void main() {
   tearDownAll(() async {
     final dbsDir = Directory(_databasesDirPath);
     if (await dbsDir.exists()) {
-      await dbsDir.delete();
+      await dbsDir.delete(recursive: true);
     }
   });
 
