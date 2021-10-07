@@ -12,7 +12,7 @@ import 'package:subsocial_flutter_auth/src/crypto.dart';
 import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
-import 'package:subsocial_flutter_auth/src/sembast_auth_account.dart';
+import 'package:subsocial_flutter_auth/src/sembast_auth_account_store.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
 
 /// [SubsocialAuth] manages subsocial accounts.
