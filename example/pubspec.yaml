@@ -29,7 +29,14 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  subsocial_flutter_auth:
+    path: ../
+  subsocial_sdk:
+    path: ../packages/subsocial_sdk
+  get_it: ^7.2.0
+  flex_color_scheme: ^3.0.1
+  flutter_hooks: ^0.18.0
+  flutter_state_notifier: ^0.7.1
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.

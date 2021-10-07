@@ -1,5 +1,8 @@
 library subsocial_flutter_auth;
 
+export 'package:fast_immutable_collections/fast_immutable_collections.dart';
+export 'package:state_notifier/state_notifier.dart';
+
 export 'src/auth_account_factory.dart';
 export 'src/auth_account_store.dart';
 export 'src/crypto.dart';
