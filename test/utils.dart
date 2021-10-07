@@ -3,7 +3,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sembast/sembast_memory.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
-import 'package:subsocial_flutter_auth/src/sembast_auth_account.dart';
+import 'package:subsocial_flutter_auth/src/sembast_auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/subsocial_auth.dart';
 import 'package:subsocial_sdk/generated/def.pb.dart';
 
