@@ -333,6 +333,13 @@ void main() {
 
     // no change to accounts
     expect((await auth.getAccounts()).toSet(), accounts.toSet());
+
+    await auth.removeAccount(accounts[0]);
+    expect(
+      await auth.getActiveAccount(),
+      isNull,
+      reason: 'removing active account will unset it',
+    );
   });
 
   test('set/unset signer', () async {
