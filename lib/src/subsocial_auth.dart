@@ -130,9 +130,11 @@ class SubsocialAuth extends StateNotifier<AuthState> {
   }
 
   /// Returns the current signer id (public key)
-  Future<String> currentSignerId() async {
-    final result = await _sdk.currentAccountId();
-    return result.accountId;
+  Future<String?> currentSignerId() async {
+    final signerId = (await _sdk.currentAccountId()).accountId;
+    final isDummySigner =
+        signerId == '3qMxrqpKLCvSBz943N5vEERRiyXBZFYySFwnBKXj7vA9W7ng';
+    return isDummySigner ? null : signerId;
   }
 
   /// Loads the current signer into memory, all subsequent transactions will be signed
