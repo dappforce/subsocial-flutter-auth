@@ -336,4 +336,45 @@ void main() {
     // no change to accounts
     expect((await auth.getAccounts()).toSet(), accounts.toSet());
   });
+
+  test('set/unset signer', () async {
+    final auth = await SubsocialAuth.defaultConfiguration(
+      sdk: mockSdk,
+      accountStore: getMemoryAuthStore(),
+    );
+
+    when(() => mockSdk.currentAccountId())
+        .thenAnswer((invocation) async => CurrentAccountId(
+              accountId: getRandomString(30),
+            ));
+
+    when(() => mockSdk.clearSigner()).thenAnswer((invocation) async {});
+
+    await auth.currentSignerId();
+    verify(() => mockSdk.currentAccountId()).called(1);
+
+    final accounts = await importRandomAccountsMocked(3, auth, mockSdk);
+    verify(() => mockSdk.importAccount(suri: any(named: 'suri'))).called(3);
+
+    const accPass = '12412';
+    const accSuri = 'this is suri lol';
+    final acc = await importAccountMocked(
+      auth,
+      mockSdk,
+      password: accPass,
+      suri: accSuri,
+    );
+
+    final resWrongPassword = await auth.setSigner(acc, 'wrong password');
+    expect(resWrongPassword, false);
+
+    final resCorrectPassword = await auth.setSigner(acc, accPass);
+    expect(resCorrectPassword, true);
+    verify(
+      () => mockSdk.importAccount(suri: accSuri),
+    ).called(1);
+
+    await auth.unsetSigner();
+    verify(() => mockSdk.clearSigner()).called(1);
+  });
 }
