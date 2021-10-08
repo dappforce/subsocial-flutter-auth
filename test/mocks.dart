@@ -1,6 +1,7 @@
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:encrypt/encrypt.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -23,10 +24,10 @@ AuthAccount generateRandomMockAccount({
     localName: getRandomString(10),
     publicKey: getRandomString(30),
     accountSecret: AccountSecret(
-      encryptedSuri: Uint8List(0),
-      encryptionKeySalt: Uint8List(0),
-      passwordHash: passwordHash ?? Uint8List(0),
-      passwordSalt: passwordSalt ?? Uint8List(0),
+      encryptedSuri: SecureRandom(16).bytes,
+      encryptionKeySalt: SecureRandom(16).bytes,
+      passwordHash: passwordHash ?? SecureRandom(16).bytes,
+      passwordSalt: passwordSalt ?? SecureRandom(16).bytes,
     ),
   );
 }
