@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:example/change_name_dialog.dart';
-import 'package:example/change_password_dialog.dart';
-import 'package:example/check_password_dialog.dart';
+import 'package:example/dialogs/change_name_dialog.dart';
+import 'package:example/dialogs/change_password_dialog.dart';
+import 'package:example/dialogs/check_password_dialog.dart';
 import 'package:example/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -20,7 +20,6 @@ class ManageAccountsPage extends StatelessWidget {
       stateNotifier: auth,
       builder: (context, state, child) {
         log('State updated');
-        log(state.accounts.toString());
         return Scaffold(
           appBar: AppBar(
             title: Text('Manage Accounts'),
@@ -125,9 +124,6 @@ class AccountWidget extends HookWidget {
   ) async {
     final SubsocialAuth auth = sl.get();
     loadingNotifier.value = true;
-
-    log('acc ${account.hashCode}');
-
     switch (action) {
       case AccountWidgetAction.setActiveAccount:
         await auth.setActiveAccount(account);
@@ -139,13 +135,13 @@ class AccountWidget extends HookWidget {
         await auth.removeAccount(account);
         break;
       case AccountWidgetAction.checkPassword:
-        await CheckPasswordDialog.show(context, account);
+        await CheckPasswordDialog(account).show(context);
         break;
       case AccountWidgetAction.changePassword:
-        await ChangePasswordDialog.show(context, account);
+        await ChangePasswordDialog(account).show(context);
         break;
       case AccountWidgetAction.changeName:
-        await ChangeNameDialog.show(context, account);
+        await ChangeNameDialog(account).show(context);
         break;
     }
 
