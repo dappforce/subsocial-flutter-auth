@@ -213,6 +213,8 @@ void main() {
       password: password,
     );
 
+    expect(await auth.getAccounts(), [account]);
+
     expect(await auth.verifyPassword(account, '1212121212'), false);
     expect(await auth.verifyPassword(account, password), true);
 
@@ -232,6 +234,8 @@ void main() {
     expect(await auth.verifyPassword(changePasswordAcc2!, '124fdsa'), false);
     expect(await auth.verifyPassword(changePasswordAcc2, password), false);
     expect(await auth.verifyPassword(changePasswordAcc2, newPassword), true);
+
+    expect(await auth.getAccounts(), [changePasswordAcc2]);
   });
   test('change in data will notify listeners', () async {
     final auth = await SubsocialAuth.defaultConfiguration(
