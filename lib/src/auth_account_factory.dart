@@ -41,17 +41,21 @@ class AccountSecretFactory {
   Future<AccountSecret> createFromPlainBytes({
     required Uint8List password,
     required Uint8List suri,
+    Uint8List? passwordSalt,
+    Uint8List? encryptionKeySalt,
   }) async {
-    final passwordSalt = _crypto.generateRandomBytes(
-      _passwordSaltLength,
-    );
-    final encryptionKeySalt = _crypto.generateRandomBytes(
-      _encryptionKeySaltLength,
-    );
+    final _passwordSalt = passwordSalt ??
+        _crypto.generateRandomBytes(
+          _passwordSaltLength,
+        );
+    final _encryptionKeySalt = encryptionKeySalt ??
+        _crypto.generateRandomBytes(
+          _encryptionKeySaltLength,
+        );
     final encryptionKey = await _derivationStrategy.driveKey(
       _encryptionKeyLength,
       password,
-      encryptionKeySalt,
+      _encryptionKeySalt,
     );
     final encryptedSuri = await _crypto.encrypt(
       key: encryptionKey,
@@ -59,14 +63,14 @@ class AccountSecretFactory {
     );
     final passwordHash = await _crypto.hash(
       plain: password,
-      salt: passwordSalt,
+      salt: _passwordSalt,
       outputLength: 32,
     );
     return AccountSecret(
       encryptedSuri: encryptedSuri,
       passwordHash: passwordHash,
-      passwordSalt: passwordSalt,
-      encryptionKeySalt: encryptionKeySalt,
+      passwordSalt: _passwordSalt,
+      encryptionKeySalt: _encryptionKeySalt,
     );
   }
 }
