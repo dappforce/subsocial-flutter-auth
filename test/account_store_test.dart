@@ -3,7 +3,10 @@ import 'dart:io';
 import 'package:fast_immutable_collections/src/ilist/list_extension.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
+import 'package:subsocial_flutter_auth/src/auth_account_factory.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
+import 'package:subsocial_flutter_auth/src/crypto.dart';
+import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/sembast_auth_account_store.dart';
 
@@ -75,6 +78,9 @@ void main() {
   });
 
   test('add will override account if same public key', () async {
+    final crypto = Crypto();
+    final keyDerivation = DefaultKeyDerivationStrategy(crypto);
+    final accountSecretFactory = AccountSecretFactory(crypto, keyDerivation);
     final AuthAccountStore store = SembastAuthAccountStore(_dbPath());
     final a = await store.getStoredAccounts();
 
@@ -90,6 +96,17 @@ void main() {
     await store.addAccount(account2);
 
     expect(await store.getStoredAccounts(), [account2].lock);
+
+    final account3 = account2.copyWith(
+      accountSecret: await accountSecretFactory.createFromPlainString(
+        password: 'test',
+        suri: 'this is a suri trust me',
+      ),
+    );
+
+    await store.addAccount(account3);
+
+    expect(await store.getStoredAccounts(), [account3].lock);
   });
 
   test('get account', () async {
