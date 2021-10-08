@@ -201,6 +201,18 @@ class SubsocialAuth extends StateNotifier<AuthState> {
     return newAccount;
   }
 
+  /// Change account name to [newName], returning the new [AuthAccount] object.
+  Future<AuthAccount> changeName(AuthAccount account, String newName) async {
+    final newAccount = account.copyWith(
+      localName: newName,
+    );
+
+    // will override the old account since they have the same public key.
+    await _accountStore.addAccount(newAccount);
+
+    return newAccount;
+  }
+
   /// Returns all stored accounts.
   Future<IList<AuthAccount>> getAccounts() async {
     return _accountStore.getStoredAccounts();
