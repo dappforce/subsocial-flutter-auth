@@ -44,12 +44,14 @@ class AccountSecretFactory {
     Uint8List? passwordSalt,
     Uint8List? encryptionKeySalt,
   }) async {
-    final _passwordSalt = passwordSalt ?? _crypto.generateRandomBytes(
-      _passwordSaltLength,
-    );
-    final _encryptionKeySalt = encryptionKeySalt ?? _crypto.generateRandomBytes(
-      _encryptionKeySaltLength,
-    );
+    final _passwordSalt = passwordSalt ??
+        _crypto.generateRandomBytes(
+          _passwordSaltLength,
+        );
+    final _encryptionKeySalt = encryptionKeySalt ??
+        _crypto.generateRandomBytes(
+          _encryptionKeySaltLength,
+        );
     final encryptionKey = await _derivationStrategy.driveKey(
       _encryptionKeyLength,
       password,
