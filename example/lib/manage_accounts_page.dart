@@ -20,7 +20,7 @@ class ManageAccountsPage extends StatelessWidget {
       stateNotifier: auth,
       builder: (context, state, child) {
         log('State updated');
-        log(state.accounts.first.accountSecret.toString());
+        log(state.accounts.toString());
         return Scaffold(
           appBar: AppBar(
             title: Text('Manage Accounts'),
@@ -78,8 +78,7 @@ class AccountWidget extends HookWidget {
           fontWeight: isActive ? FontWeight.w500 : FontWeight.normal,
         ),
       ),
-      subtitle:
-          Text(account.publicKey + '\n\n${account.accountSecret.toString()}'),
+      subtitle: Text(account.publicKey),
       trailing: PopupMenuButton<AccountWidgetAction>(
         itemBuilder: (context) => [
           if (isActive)
