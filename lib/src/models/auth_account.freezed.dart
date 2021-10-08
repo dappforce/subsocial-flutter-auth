@@ -144,11 +144,12 @@ class __$AuthAccountCopyWithImpl<$Res> extends _$AuthAccountCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$_AuthAccount implements _AuthAccount {
+class _$_AuthAccount extends _AuthAccount {
   const _$_AuthAccount(
       {required this.localName,
       required this.publicKey,
-      required this.accountSecret});
+      required this.accountSecret})
+      : super._();
 
   @override
 
@@ -162,11 +163,6 @@ class _$_AuthAccount implements _AuthAccount {
 
   /// Contains the information used to d/encrypt the suri.
   final AccountSecret accountSecret;
-
-  @override
-  String toString() {
-    return 'AuthAccount(localName: $localName, publicKey: $publicKey, accountSecret: $accountSecret)';
-  }
 
   @override
   bool operator ==(dynamic other) {
@@ -196,11 +192,12 @@ class _$_AuthAccount implements _AuthAccount {
       __$AuthAccountCopyWithImpl<_AuthAccount>(this, _$identity);
 }
 
-abstract class _AuthAccount implements AuthAccount {
+abstract class _AuthAccount extends AuthAccount {
   const factory _AuthAccount(
       {required String localName,
       required String publicKey,
       required AccountSecret accountSecret}) = _$_AuthAccount;
+  const _AuthAccount._() : super._();
 
   @override
 
@@ -388,11 +385,6 @@ class _$_AccountSecret extends _AccountSecret {
 
   /// Salt used to hash the password.
   final Uint8List passwordSalt;
-
-  @override
-  String toString() {
-    return 'AccountSecret(encryptedSuri: $encryptedSuri, encryptionKeySalt: $encryptionKeySalt, passwordHash: $passwordHash, passwordSalt: $passwordSalt)';
-  }
 
   @override
   bool operator ==(dynamic other) {
