@@ -33,7 +33,7 @@ class CreateAccountPage extends HookWidget {
         seedWordsSnapshot.connectionState == ConnectionState.waiting;
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Create New Account'),
+        title: Text(isGenerate ? 'Create New Account' : 'Import Account'),
       ),
       body: Padding(
         padding: const EdgeInsets.all(12.0),
