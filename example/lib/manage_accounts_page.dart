@@ -1,3 +1,6 @@
+import 'dart:developer';
+
+import 'package:example/change_name_dialog.dart';
 import 'package:example/change_password_dialog.dart';
 import 'package:example/check_password_dialog.dart';
 import 'package:example/locator.dart';
@@ -16,6 +19,8 @@ class ManageAccountsPage extends StatelessWidget {
     return StateNotifierBuilder<AuthState>(
       stateNotifier: auth,
       builder: (context, state, child) {
+        log('State updated');
+        log(state.accounts.first.accountSecret.toString());
         return Scaffold(
           appBar: AppBar(
             title: Text('Manage Accounts'),
@@ -44,6 +49,7 @@ enum AccountWidgetAction {
   removeAccount,
   checkPassword,
   changePassword,
+  changeName,
 }
 
 class AccountWidget extends HookWidget {
@@ -72,7 +78,8 @@ class AccountWidget extends HookWidget {
           fontWeight: isActive ? FontWeight.w500 : FontWeight.normal,
         ),
       ),
-      subtitle: Text(account.publicKey),
+      subtitle:
+          Text(account.publicKey + '\n\n${account.accountSecret.toString()}'),
       trailing: PopupMenuButton<AccountWidgetAction>(
         itemBuilder: (context) => [
           if (isActive)
@@ -97,6 +104,10 @@ class AccountWidget extends HookWidget {
             child: Text("Change password"),
             value: AccountWidgetAction.changePassword,
           ),
+          const PopupMenuItem(
+            child: Text("Change name"),
+            value: AccountWidgetAction.changeName,
+          ),
         ],
         enabled: !isLoading.value,
         onSelected: (value) => _handleAction(
@@ -116,6 +127,8 @@ class AccountWidget extends HookWidget {
     final SubsocialAuth auth = sl.get();
     loadingNotifier.value = true;
 
+    log('acc ${account.hashCode}');
+
     switch (action) {
       case AccountWidgetAction.setActiveAccount:
         await auth.setActiveAccount(account);
@@ -131,6 +144,9 @@ class AccountWidget extends HookWidget {
         break;
       case AccountWidgetAction.changePassword:
         await ChangePasswordDialog.show(context, account);
+        break;
+      case AccountWidgetAction.changeName:
+        await ChangeNameDialog.show(context, account);
         break;
     }
 

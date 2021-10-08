@@ -5,23 +5,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:subsocial_flutter_auth/subsocial_flutter_auth.dart';
 
-class ChangePasswordDialog extends HookWidget {
+class ChangeNameDialog extends HookWidget {
   final AuthAccount _account;
 
-  const ChangePasswordDialog(this._account, {Key? key}) : super(key: key);
+  const ChangeNameDialog(this._account, {Key? key}) : super(key: key);
 
   static Future<void> show(BuildContext context, AuthAccount account) async {
     return showDialog(
       context: context,
-      builder: (context) => ChangePasswordDialog(account),
+      builder: (context) => ChangeNameDialog(account),
     );
   }
 
   @override
   Widget build(BuildContext context) {
     final auth = sl.get<SubsocialAuth>();
-    final passwordController = useTextEditingController();
-    final newPasswordController = useTextEditingController();
+    final nameController = useTextEditingController();
     final isLoading = useState(false);
     final errorText = useState<String?>(null);
     return Dialog(
@@ -31,22 +30,15 @@ class ChangePasswordDialog extends HookWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Text(
-              'Change Password',
+              'Change Name',
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.headline6,
             ),
             const SizedBox(height: 12),
             TextField(
-              controller: passwordController,
+              controller: nameController,
               enabled: !isLoading.value,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: 'Password'),
-            ),
-            TextField(
-              controller: newPasswordController,
-              enabled: !isLoading.value,
-              obscureText: true,
-              decoration: const InputDecoration(labelText: 'New Password'),
+              decoration: const InputDecoration(labelText: 'New name'),
             ),
             Row(
               children: [
@@ -55,28 +47,19 @@ class ChangePasswordDialog extends HookWidget {
                   onPressed: isLoading.value
                       ? null
                       : () async {
-                          final password = passwordController.text;
-                          final newPassword = newPasswordController.text;
-                          if (password.isEmpty || newPassword.isEmpty) {
-                            errorText.value = 'Fields cannot be empty';
+                          final name = nameController.text;
+                          if (name.isEmpty) {
+                            errorText.value = 'Name cannot be empty';
                             return;
                           }
                           isLoading.value = true;
                           try {
-                            final newAcc = await auth.changePassword(
-                                _account, password, newPassword);
-                            if (newAcc != null) {
-                              Navigator.of(context).pop();
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                      content: Text('Password have changed')));
-                            } else {
-                              errorText.value = 'incorrect old password';
-                            }
+                            await auth.changeName(_account, name);
+                            Navigator.of(context).pop();
                           } catch (e, stk) {
                             errorText.value = e.toString();
                             log(
-                              'error while changing password',
+                              'error while changing name',
                               error: e,
                               stackTrace: stk,
                             );
