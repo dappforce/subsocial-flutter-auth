@@ -1,3 +1,5 @@
+import 'package:example/change_password_dialog.dart';
+import 'package:example/check_password_dialog.dart';
 import 'package:example/locator.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -40,6 +42,8 @@ enum AccountWidgetAction {
   setActiveAccount,
   unsetActiveAccount,
   removeAccount,
+  checkPassword,
+  changePassword,
 }
 
 class AccountWidget extends HookWidget {
@@ -73,26 +77,39 @@ class AccountWidget extends HookWidget {
         itemBuilder: (context) => [
           if (isActive)
             const PopupMenuItem(
-              child: Text("Unset Active"),
+              child: Text("Unset active"),
               value: AccountWidgetAction.unsetActiveAccount,
             )
           else
             const PopupMenuItem(
-              child: Text("Set Active"),
+              child: Text("Set active"),
               value: AccountWidgetAction.setActiveAccount,
             ),
           const PopupMenuItem(
             child: Text("Remove"),
             value: AccountWidgetAction.removeAccount,
           ),
+          const PopupMenuItem(
+            child: Text("Check password"),
+            value: AccountWidgetAction.checkPassword,
+          ),
+          const PopupMenuItem(
+            child: Text("Change password"),
+            value: AccountWidgetAction.changePassword,
+          ),
         ],
         enabled: !isLoading.value,
-        onSelected: (value) => _handleAction(value, isLoading),
+        onSelected: (value) => _handleAction(
+          context,
+          value,
+          isLoading,
+        ),
       ),
     );
   }
 
   Future<void> _handleAction(
+    BuildContext context,
     AccountWidgetAction action,
     ValueNotifier<bool> loadingNotifier,
   ) async {
@@ -108,6 +125,12 @@ class AccountWidget extends HookWidget {
         break;
       case AccountWidgetAction.removeAccount:
         await auth.removeAccount(account);
+        break;
+      case AccountWidgetAction.checkPassword:
+        await CheckPasswordDialog.show(context, account);
+        break;
+      case AccountWidgetAction.changePassword:
+        await ChangePasswordDialog.show(context, account);
         break;
     }
 
