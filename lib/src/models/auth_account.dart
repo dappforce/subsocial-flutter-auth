@@ -1,7 +1,7 @@
-import 'dart:convert' as convert;
 import 'dart:typed_data';
 
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:subsocial_flutter_auth/src/utils.dart';
 
 part 'auth_account.freezed.dart';
 
@@ -57,27 +57,10 @@ class AccountSecret with _$AccountSecret {
   String toString() {
     return '''
 AccountSecret(
-  encryptedSuri: ${encryptedSuri.base64},
-  encryptionKeySalt: ${encryptionKeySalt.base64},
-  passwordHash: ${passwordHash.base64},
-  passwordSalt: ${passwordSalt.base64},
+  encryptedSuri: OMITTED,
+  encryptionKeySalt: OMITTED,
+  passwordHash: OMITTED,
+  passwordSalt: OMITTED,
 )''';
-  }
-}
-
-extension on Uint8List {
-  String get base64 => convert.base64.encode(this);
-}
-
-extension on String {
-  String indent({
-    int level = 2,
-    int start = 0,
-  }) {
-    final indentation = ' ' * level;
-    final lines = convert.LineSplitter.split(this);
-    final unindentedLines = lines.take(start);
-    final indentedLines = lines.skip(start).map((line) => '$indentation$line');
-    return unindentedLines.followedBy(indentedLines).join('\n');
   }
 }
