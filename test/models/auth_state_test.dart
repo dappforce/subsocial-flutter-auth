@@ -34,7 +34,7 @@ void main() {
     expect(obj3 == obj4 && obj4 == obj3, isTrue);
     expect(obj3.hashCode == obj4.hashCode, isTrue);
 
-    expect(obj1 == obj4 && obj4 == obj1, isFalse);
+    expect(obj1 == obj4 || obj4 == obj1, isFalse);
     expect(obj1.hashCode == obj4.hashCode, isFalse);
   });
 }

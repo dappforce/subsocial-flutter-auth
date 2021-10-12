@@ -25,7 +25,7 @@ void main() {
       publicKey: 'fasdasd',
     );
 
-    expect(obj1 == obj3 && obj3 == obj1, isFalse);
+    expect(obj1 == obj3 || obj3 == obj1, isFalse);
     expect(obj1.hashCode == obj3.hashCode, isFalse);
   });
 }
