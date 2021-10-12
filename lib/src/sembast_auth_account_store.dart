@@ -2,13 +2,10 @@ import 'dart:async';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:sembast/blob.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
-
-import 'models/account_secret.dart';
 
 /// [SembastAuthAccountStore] stores accounts and the current active account on disk
 /// using sembast package.
@@ -96,16 +93,11 @@ class SembastAuthAccountStore extends ChangeNotifier
 /// Maps [AuthAccount] for sembast storage.
 extension SembastAuthAccountMapper on AuthAccount {
   MapEntry<String, Map<String, Object>> toSembastMap() {
-    final secret = accountSecret;
     return MapEntry(
       publicKey,
       {
         'name': localName,
         'publicKey': publicKey,
-        'encryptedSuri': Blob(secret.encryptedSuri),
-        'encryptionKeySalt': Blob(secret.encryptionKeySalt),
-        'passwordHash': Blob(secret.passwordHash),
-        'passwordSalt': Blob(secret.passwordSalt),
       },
     );
   }
@@ -119,12 +111,6 @@ extension SembastAuthAccountMapper on AuthAccount {
     return AuthAccount(
       localName: map['name']! as String,
       publicKey: map['publicKey']! as String,
-      accountSecret: AccountSecret(
-        encryptedSuri: (map['encryptedSuri']! as Blob).bytes,
-        encryptionKeySalt: (map['encryptionKeySalt']! as Blob).bytes,
-        passwordHash: (map['passwordHash']! as Blob).bytes,
-        passwordSalt: (map['passwordSalt']! as Blob).bytes,
-      ),
     );
   }
 }

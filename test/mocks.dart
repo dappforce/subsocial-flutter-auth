@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:encrypt/encrypt.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:path_provider_platform_interface/path_provider_platform_interface.dart';
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
@@ -30,17 +31,10 @@ AccountSecret genRandomAccountSecret({
   );
 }
 
-AuthAccount generateRandomMockAccount({
-  Uint8List? passwordSalt,
-  Uint8List? passwordHash,
-}) {
+AuthAccount generateRandomMockAccount() {
   return AuthAccount(
     localName: getRandomString(10),
     publicKey: getRandomString(30),
-    accountSecret: genRandomAccountSecret(
-      passwordSalt: passwordSalt,
-      passwordHash: passwordHash,
-    ),
   );
 }
 
@@ -61,3 +55,42 @@ class MockAuthAccountStore extends Mock implements AuthAccountStore {}
 class MockCrypto extends Mock implements Crypto {}
 
 class FakeVerifyHashParameters extends Fake implements VerifyHashParameters {}
+
+class MockSecureStorage extends Mock implements FlutterSecureStorage {
+  final Map<String, String> values = {};
+
+  @override
+  Future<void> write({
+    required String key,
+    required String? value,
+    IOSOptions? iOptions = IOSOptions.defaultOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
+    if (value == null) {
+      await delete(key: key);
+    } else {
+      values[key] = value;
+    }
+  }
+
+  @override
+  Future<String?> read({
+    required String key,
+    IOSOptions? iOptions = IOSOptions.defaultOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
+    return values[key];
+  }
+
+  @override
+  Future<void> delete({
+    required String key,
+    IOSOptions? iOptions = IOSOptions.defaultOptions,
+    AndroidOptions? aOptions,
+    LinuxOptions? lOptions,
+  }) async {
+    values.remove(key);
+  }
+}

@@ -5,6 +5,7 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:subsocial_flutter_auth/src/account_secret_store.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_factory.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/crypto.dart';
@@ -12,6 +13,7 @@ import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_flutter_auth/src/secure_account_secret_store.dart';
 import 'package:subsocial_flutter_auth/src/sembast_auth_account_store.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
 
@@ -21,6 +23,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   final Crypto _crypto;
   final KeyDerivationStrategy _derivationStrategy;
   final AuthAccountStore _accountStore;
+  final AccountSecretStore _secretStore;
   final AccountSecretFactory _accountSecretFactory;
   final int _encryptionKeyLength;
 
@@ -30,6 +33,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     this._crypto,
     this._derivationStrategy,
     this._accountStore,
+    this._secretStore,
     this._accountSecretFactory,
     this._encryptionKeyLength,
   ) : super(AuthState.empty());
@@ -40,6 +44,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     Crypto? crypto,
     KeyDerivationStrategy? derivationStrategy,
     AuthAccountStore? accountStore,
+    AccountSecretStore? secretStore,
     AccountSecretFactory? accountSecretFactory,
     int? encryptionKeyLength,
   }) async {
@@ -54,6 +59,8 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
           join(appDir.path, 'subsocial_auth_accounts'),
         );
 
+    final _secretStore = secretStore ?? SecureAccountSecretStore();
+
     final _accountSecretFactory = accountSecretFactory ??
         AccountSecretFactory(
           _crypto,
@@ -67,6 +74,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
       _crypto,
       _derivationStrategy,
       _accountStore,
+      _secretStore,
       _accountSecretFactory,
       _encryptionKeyLength,
     );
@@ -114,13 +122,15 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     final authAccount = AuthAccount(
       localName: localName,
       publicKey: publicKey,
-      accountSecret: await _accountSecretFactory.createFromPlainString(
-        password: password,
-        suri: suri,
-      ),
+    );
+
+    final accountSecret = await _accountSecretFactory.createFromPlainString(
+      password: password,
+      suri: suri,
     );
 
     await _accountStore.addAccount(authAccount);
+    await _secretStore.addSecret(authAccount.publicKey, accountSecret);
 
     await update();
 
@@ -165,10 +175,11 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   /// Verifies if the given [password] is correct for the given [account].
   /// Returns true if password is correct, false otherwise.
   Future<bool> verifyPassword(AuthAccount account, String password) async {
+    final secret = (await _secretStore.getSecret(account.publicKey))!;
     return _crypto.verifyHash(VerifyHashParameters(
       plain: Uint8List.fromList(utf8.encode(password)),
-      expectedHash: account.accountSecret.passwordHash,
-      salt: account.accountSecret.passwordSalt,
+      expectedHash: secret.passwordHash,
+      salt: secret.passwordSalt,
     ));
   }
 
@@ -186,19 +197,17 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
 
     final suriBytes = await _decryptSuri(account, password);
 
-    final newAccount = account.copyWith(
-      accountSecret: await _accountSecretFactory.createFromPlainBytes(
-        password: Uint8List.fromList(utf8.encode(newPassword)),
-        suri: suriBytes,
-      ),
+    final newSecret = await _accountSecretFactory.createFromPlainBytes(
+      password: Uint8List.fromList(utf8.encode(newPassword)),
+      suri: suriBytes,
     );
 
-    // will override the old account since they have the same public key.
-    await _accountStore.addAccount(newAccount);
+    // will override the old secret since they have the same public key.
+    await _secretStore.addSecret(account.publicKey, newSecret);
 
     await update();
 
-    return newAccount;
+    return account;
   }
 
   /// Change account name to [newName], returning the new [AuthAccount] object.
@@ -254,8 +263,9 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   }
 
   Future<Uint8List> _decryptSuri(AuthAccount account, String password) async {
+    final secret = (await _secretStore.getSecret(account.publicKey))!;
+
     final passwordBytes = Uint8List.fromList(utf8.encode(password));
-    final secret = account.accountSecret;
     final key = await _derivationStrategy.driveKey(
       _encryptionKeyLength,
       passwordBytes,

@@ -4,17 +4,22 @@ import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
-import 'package:encrypt/encrypt.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sembast/sembast.dart';
+import 'package:subsocial_flutter_auth/src/account_secret_store.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_flutter_auth/src/secure_account_secret_store.dart';
 import 'package:subsocial_flutter_auth/src/subsocial_auth.dart';
 import 'package:subsocial_sdk/generated/def.pb.dart';
 
 import 'mocks.dart';
 import 'utils.dart';
+
+AccountSecretStore getTestAccountSecretStore() {
+  return SecureAccountSecretStore.testing(MockSecureStorage());
+}
 
 void main() {
   final mockSdk = MockSubsocial();
@@ -73,7 +78,10 @@ void main() {
     expect(words, expectedWords);
   });
   test('import account new account', () async {
-    final auth = await SubsocialAuth.defaultConfiguration(sdk: mockSdk);
+    final auth = await SubsocialAuth.defaultConfiguration(
+      sdk: mockSdk,
+      secretStore: getTestAccountSecretStore(),
+    );
 
     const localName = 'Tarek';
     const suri =
@@ -149,17 +157,17 @@ void main() {
   test('verifyPassword stubbed', () async {
     const correctPassword = '123';
     const incorrectPassword = '3323';
-    final salt = SecureRandom(12).bytes;
-    final hash = SecureRandom(12).bytes;
-    final account = generateRandomMockAccount(
-      passwordSalt: salt,
-      passwordHash: hash,
-    );
+    final account = generateRandomMockAccount();
+    final secret = genRandomAccountSecret();
     final mockCrypto = MockCrypto();
+
+    final secretStore = getTestAccountSecretStore();
+    await secretStore.addSecret(account.publicKey, secret);
 
     final auth = await SubsocialAuth.defaultConfiguration(
       sdk: mockSdk,
       crypto: mockCrypto,
+      secretStore: secretStore,
     );
 
     when(() => mockCrypto.verifyHash(any()))
@@ -185,7 +193,10 @@ void main() {
     expect(resultShouldBeTrue, true);
   });
   test('verifyPassword', () async {
-    final auth = await SubsocialAuth.defaultConfiguration(sdk: mockSdk);
+    final auth = await SubsocialAuth.defaultConfiguration(
+      sdk: mockSdk,
+      secretStore: getTestAccountSecretStore(),
+    );
     const suri = '12121212';
     const name = 'tarek';
     const password = '1231';
@@ -204,6 +215,7 @@ void main() {
     final auth = await SubsocialAuth.defaultConfiguration(
       sdk: mockSdk,
       accountStore: getMemoryAuthStore(),
+      secretStore: getTestAccountSecretStore(),
     );
     const suri = '12121212';
     const name = 'tarek';
@@ -228,11 +240,6 @@ void main() {
     final changePasswordAcc2 =
         await auth.changePassword(account, password, newPassword);
     expect(changePasswordAcc2, isNotNull);
-    expect(
-      changePasswordAcc2,
-      isNot(equals(account)),
-      reason: 'changing password will change account secret',
-    );
 
     expect(await auth.verifyPassword(changePasswordAcc2!, '124fdsa'), false);
     expect(await auth.verifyPassword(changePasswordAcc2, password), false);
@@ -244,6 +251,7 @@ void main() {
     final auth = await SubsocialAuth.defaultConfiguration(
       sdk: mockSdk,
       accountStore: getMemoryAuthStore(),
+      secretStore: getTestAccountSecretStore(),
     );
 
     int invokedCounter = 0;
@@ -273,6 +281,7 @@ void main() {
     final auth = await SubsocialAuth.defaultConfiguration(
       sdk: mockSdk,
       accountStore: getMemoryAuthStore(),
+      secretStore: getTestAccountSecretStore(),
     );
 
     final accounts = await importRandomAccountsMocked(3, auth, mockSdk);
@@ -295,6 +304,7 @@ void main() {
     final auth = await SubsocialAuth.defaultConfiguration(
       sdk: mockSdk,
       accountStore: getMemoryAuthStore(),
+      secretStore: getTestAccountSecretStore(),
     );
 
     final account1 = await importAccountMocked(auth, mockSdk);
@@ -316,6 +326,7 @@ void main() {
     final auth = await SubsocialAuth.defaultConfiguration(
       sdk: mockSdk,
       accountStore: getMemoryAuthStore(),
+      secretStore: getTestAccountSecretStore(),
     );
     final accounts = await importRandomAccountsMocked(3, auth, mockSdk);
 
@@ -348,6 +359,7 @@ void main() {
     final auth = await SubsocialAuth.defaultConfiguration(
       sdk: mockSdk,
       accountStore: getMemoryAuthStore(),
+      secretStore: getTestAccountSecretStore(),
     );
 
     when(() => mockSdk.currentAccountId())
