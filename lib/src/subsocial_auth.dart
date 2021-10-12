@@ -49,7 +49,7 @@ class SubsocialAuth extends StateNotifier<AuthState> {
     final _sdk = sdk ?? (await Subsocial.instance);
     final _crypto = crypto ?? Crypto();
     final _derivationStrategy =
-        derivationStrategy ?? DefaultKeyDerivationStrategy(_crypto);
+        derivationStrategy ?? KeyDerivationStrategy(_crypto);
 
     final appDir = await getApplicationDocumentsDirectory();
     final _accountStore = accountStore ??
