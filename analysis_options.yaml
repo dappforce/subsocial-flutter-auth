@@ -41,3 +41,4 @@ linter:
 
     ########################################
     sort_unnamed_constructors_first: false
+    require_trailing_commas: false
