@@ -57,13 +57,13 @@ Future<AuthAccount> importAccountMocked(
   );
 }
 
-Future<void> waitForAuthUpdate(SubsocialAuth auth) async {
-  int iterationCounter = 0;
-  while (auth.updateCallCounter != 0) {
-    await Future.delayed(const Duration(milliseconds: 10));
-    iterationCounter++;
-    if (iterationCounter > 200) {
-      throw 'counter is stuck at ${auth.updateCallCounter}';
-    }
-  }
-}
+// Future<void> waitForAuthUpdate(SubsocialAuth auth) async {
+//   int iterationCounter = 0;
+//   while (auth.updateCallCounter != 0) {
+//     await Future.delayed(const Duration(milliseconds: 10));
+//     iterationCounter++;
+//     if (iterationCounter > 200) {
+//       throw 'counter is stuck at ${auth.updateCallCounter}';
+//     }
+//   }
+// }

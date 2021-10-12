@@ -32,9 +32,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     this._accountStore,
     this._accountSecretFactory,
     this._encryptionKeyLength,
-  ) : super(AuthState.empty()) {
-    _accountStore.addListener(update);
-  }
+  ) : super(AuthState.empty());
 
   /// Creates a [SubsocialAuth] with the default configuration.
   static Future<SubsocialAuth> defaultConfiguration({
@@ -89,25 +87,12 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   @override
   set value(AuthState newValue) => super.value = newValue;
 
-  /// Used to wait for all update calls to finish
-  @visibleForTesting
-  int updateCallCounter = 0;
-
   /// Updates the current [AuthState]
   Future<AuthState> update() async {
-    assert(() {
-      updateCallCounter++;
-      return true;
-    }(), '');
-    state = AuthState(
+    return state = AuthState(
       activeAccount: await getActiveAccount(),
       accounts: await getAccounts(),
     );
-    assert(() {
-      updateCallCounter--;
-      return true;
-    }(), '');
-    return state;
   }
 
   /// Generates new mnemonic
@@ -136,6 +121,8 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     );
 
     await _accountStore.addAccount(authAccount);
+
+    await update();
 
     return authAccount;
   }
@@ -209,6 +196,8 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     // will override the old account since they have the same public key.
     await _accountStore.addAccount(newAccount);
 
+    await update();
+
     return newAccount;
   }
 
@@ -220,6 +209,8 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
 
     // will override the old account since they have the same public key.
     await _accountStore.addAccount(newAccount);
+
+    await update();
 
     return newAccount;
   }
@@ -235,6 +226,8 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
       await unsetActiveAccount();
     }
     await _accountStore.removeAccount(account.publicKey);
+
+    await update();
   }
 
   /// Returns the current active account, returns null if there is no active account.
@@ -244,18 +237,20 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
 
   /// Sets the current active account.
   Future<bool> setActiveAccount(AuthAccount account) async {
-    return _accountStore.setActiveAccount(account);
+    final res = await _accountStore.setActiveAccount(account);
+
+    await update();
+
+    return res;
   }
 
   /// Clears the current active account.
   Future<bool> unsetActiveAccount() async {
-    return _accountStore.unsetActiveAccount();
-  }
+    final res = await _accountStore.unsetActiveAccount();
 
-  @override
-  void dispose() {
-    _accountStore.removeListener(update);
-    super.dispose();
+    await update();
+
+    return res;
   }
 
   Future<Uint8List> _decryptSuri(AuthAccount account, String password) async {

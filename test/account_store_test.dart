@@ -23,31 +23,31 @@ void main() {
     }
   });
 
-  test('change in data will notify listeners', () async {
-    final AuthAccountStore store = SembastAuthAccountStore(_dbPath());
-    int invokedCounter = 0;
-    void _listener() => invokedCounter++;
-    store.addListener(_listener);
-    final accounts =
-        List<AuthAccount>.generate(10, (index) => generateRandomMockAccount());
-
-    await Future.wait(accounts.map((account) async {
-      await store.addAccount(account);
-    }));
-    expect(invokedCounter, 10);
-
-    await store.setActiveAccount(generateRandomMockAccount());
-    await store.unsetActiveAccount();
-
-    expect(invokedCounter, 12);
-
-    await Future.wait(accounts.map((account) async {
-      await store.removeAccount(account.publicKey);
-    }));
-    expect(invokedCounter, 22);
-
-    store.removeListener(_listener);
-  });
+  // test('change in data will notify listeners', () async {
+  //   final AuthAccountStore store = SembastAuthAccountStore(_dbPath());
+  //   int invokedCounter = 0;
+  //   void _listener() => invokedCounter++;
+  //   store.addListener(_listener);
+  //   final accounts =
+  //       List<AuthAccount>.generate(10, (index) => generateRandomMockAccount());
+  //
+  //   await Future.wait(accounts.map((account) async {
+  //     await store.addAccount(account);
+  //   }));
+  //   expect(invokedCounter, 10);
+  //
+  //   await store.setActiveAccount(generateRandomMockAccount());
+  //   await store.unsetActiveAccount();
+  //
+  //   expect(invokedCounter, 12);
+  //
+  //   await Future.wait(accounts.map((account) async {
+  //     await store.removeAccount(account.publicKey);
+  //   }));
+  //   expect(invokedCounter, 22);
+  //
+  //   store.removeListener(_listener);
+  // });
 
   test('add/remove/get account', () async {
     final AuthAccountStore store = SembastAuthAccountStore(_dbPath());

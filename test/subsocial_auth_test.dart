@@ -255,17 +255,15 @@ void main() {
 
     final accounts = await importRandomAccountsMocked(3, auth, mockSdk);
 
-    await waitForAuthUpdate(auth);
     expect(invokedCounter, 3);
 
     await auth.setActiveAccount(accounts[0]);
-    await auth.unsetActiveAccount();
+    expect(invokedCounter, 4);
 
-    await waitForAuthUpdate(auth);
+    await auth.unsetActiveAccount();
     expect(invokedCounter, 5);
 
     await removeAllAccounts(auth);
-    await waitForAuthUpdate(auth);
     expect(invokedCounter, 8);
 
     auth.removeListener(_listener);

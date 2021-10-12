@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
-
 import 'models/auth_account.dart';
 
-abstract class AuthAccountStore implements ChangeNotifier {
+/// Provides a storage for [AuthAccount].
+abstract class AuthAccountStore {
   /// Returns a list of all stored accounts
   Future<List<AuthAccount>> getStoredAccounts();
 
