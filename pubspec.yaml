@@ -8,15 +8,15 @@ environment:
   flutter: ">=1.17.0"
 
 dependencies:
+  collection: ^1.15.0
   encrypt: ^5.0.1
   flutter:
     sdk: flutter
-  sembast: ^3.1.1
-  collection: ^1.15.0
-  path_provider: ^2.0.5
   path: ^1.8.0
-  state_notifier: ^0.7.1
+  path_provider: ^2.0.5
   pointycastle: ^3.3.4
+  sembast: ^3.1.1
+  state_notifier: ^0.7.1
   subsocial_sdk:
     path: packages/subsocial_sdk
 
