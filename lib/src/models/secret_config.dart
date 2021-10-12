@@ -2,6 +2,72 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
 
+@immutable
+class AccountSecretConfig {
+  final SecretConfig hashingConfig;
+  final SecretConfig keyDerivationConfig;
+  final SecretConfig suriEncryptionConfig;
+
+  @visibleForTesting
+  const AccountSecretConfig.internal({
+    required this.hashingConfig,
+    required this.keyDerivationConfig,
+    required this.suriEncryptionConfig,
+  });
+
+  factory AccountSecretConfig.defaultConfig() {
+    final hashing = Argon2SecretConfig(
+      type: 'id',
+      version: 0x10,
+      iterations: 2,
+      memoryCost: 16,
+      lanes: 1,
+    );
+    const encryption = DefaultAesSecretConfig();
+    return AccountSecretConfig.internal(
+      hashingConfig: hashing,
+      keyDerivationConfig: hashing,
+      suriEncryptionConfig: encryption,
+    );
+  }
+
+  factory AccountSecretConfig.fromMap(Map<String, dynamic> map) {
+    return AccountSecretConfig.internal(
+      hashingConfig:
+          SecretConfig.fromMap(map['hashingConfig']! as Map<String, dynamic>),
+      keyDerivationConfig: SecretConfig.fromMap(
+          map['keyDerivationConfig']! as Map<String, dynamic>),
+      suriEncryptionConfig: SecretConfig.fromMap(
+          map['suriEncryptionConfig']! as Map<String, dynamic>),
+    );
+  }
+
+  Map<String, dynamic> toMap() => {
+        'hashingConfig': hashingConfig.toMap(),
+        'keyDerivationConfig': keyDerivationConfig.toMap(),
+        'suriEncryptionConfig': suriEncryptionConfig.toMap(),
+      };
+
+  List<Object?> get _props => [
+        hashingConfig,
+        keyDerivationConfig,
+        suriEncryptionConfig,
+      ];
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is AccountSecretConfig &&
+          const DeepCollectionEquality().equals(_props, other._props);
+
+  @override
+  int get hashCode =>
+      _props.map((e) => const DeepCollectionEquality().hash(e)).fold(
+            runtimeType.hashCode,
+            (previousValue, element) => previousValue ^ element,
+          );
+}
+
 /// [SecretConfig] represents the config used to get a secret (hash, encryption)
 @immutable
 abstract class SecretConfig {
@@ -71,16 +137,6 @@ class Argon2SecretConfig extends SecretConfig {
   })  : assert(['d', 'i', 'id'].contains(type)),
         assert([0x13, 0x10].contains(version));
 
-  factory Argon2SecretConfig.defaultConfig() {
-    return Argon2SecretConfig(
-      type: 'id',
-      version: 0x10,
-      iterations: 2,
-      memoryCost: 16,
-      lanes: 1,
-    );
-  }
-
   factory Argon2SecretConfig.fromMap(Map<String, dynamic> map) {
     if (map['configType'] != configType) {
       throw ArgumentError.value(
@@ -118,10 +174,6 @@ class DefaultAesSecretConfig extends SecretConfig {
 
   /// Creates [DefaultAesSecretConfig]
   const DefaultAesSecretConfig();
-
-  factory DefaultAesSecretConfig.defaultConfig() {
-    return const DefaultAesSecretConfig();
-  }
 
   factory DefaultAesSecretConfig.fromMap(Map<String, dynamic> map) {
     if (map['configType'] != configType) {
