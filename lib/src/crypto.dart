@@ -1,8 +1,8 @@
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter/foundation.dart' show compute;
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:pointycastle/key_derivators/argon2.dart'
     show Argon2BytesGenerator;
 import 'package:pointycastle/pointycastle.dart' show Argon2Parameters;

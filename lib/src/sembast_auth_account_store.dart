@@ -8,6 +8,8 @@ import 'package:sembast/sembast_io.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 
+import 'models/account_secret.dart';
+
 /// [SembastAuthAccountStore] stores accounts and the current active account on disk
 /// using sembast package.
 class SembastAuthAccountStore extends ChangeNotifier

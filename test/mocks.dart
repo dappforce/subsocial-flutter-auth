@@ -7,6 +7,7 @@ import 'package:path_provider_platform_interface/path_provider_platform_interfac
 import 'package:plugin_platform_interface/plugin_platform_interface.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/crypto.dart';
+import 'package:subsocial_flutter_auth/src/models/account_secret.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';

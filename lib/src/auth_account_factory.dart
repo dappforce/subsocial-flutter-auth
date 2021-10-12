@@ -5,7 +5,7 @@ import 'package:subsocial_flutter_auth/src/crypto.dart';
 import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
 
-import 'models/auth_account.dart';
+import 'models/account_secret.dart';
 
 /// [AccountSecretFactory] provides methods to construct [AccountSecret] using
 /// [Crypto]
