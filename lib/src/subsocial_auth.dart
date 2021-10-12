@@ -12,6 +12,7 @@ import 'package:subsocial_flutter_auth/src/crypto.dart';
 import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
+import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
 import 'package:subsocial_flutter_auth/src/sembast_auth_account_store.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
 
@@ -167,11 +168,11 @@ class SubsocialAuth extends StateNotifier<AuthState> {
   /// Verifies if the given [password] is correct for the given [account].
   /// Returns true if password is correct, false otherwise.
   Future<bool> verifyPassword(AuthAccount account, String password) async {
-    return _crypto.verifyHash(
+    return _crypto.verifyHash(VerifyHashParameters(
       plain: Uint8List.fromList(utf8.encode(password)),
       expectedHash: account.accountSecret.passwordHash,
       salt: account.accountSecret.passwordSalt,
-    );
+    ));
   }
 
   /// Changes the password of an account, given its old password [password] and
@@ -255,9 +256,9 @@ class SubsocialAuth extends StateNotifier<AuthState> {
       passwordBytes,
       secret.encryptionKeySalt,
     );
-    return _crypto.decrypt(
+    return _crypto.decrypt(DecryptParameters(
       key: key,
       cipher: secret.encryptedSuri,
-    );
+    ));
   }
 }

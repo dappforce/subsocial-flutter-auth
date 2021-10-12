@@ -3,6 +3,7 @@ import 'dart:typed_data';
 
 import 'package:subsocial_flutter_auth/src/crypto.dart';
 import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
+import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
 
 import 'models/auth_account.dart';
 
@@ -57,15 +58,15 @@ class AccountSecretFactory {
       password,
       _encryptionKeySalt,
     );
-    final encryptedSuri = await _crypto.encrypt(
+    final encryptedSuri = await _crypto.encrypt(EncryptParameters(
       key: encryptionKey,
       plain: suri,
-    );
-    final passwordHash = await _crypto.hash(
+    ));
+    final passwordHash = await _crypto.hash(HashParameters(
       plain: password,
       salt: _passwordSalt,
       outputLength: 32,
-    );
+    ));
     return AccountSecret(
       encryptedSuri: encryptedSuri,
       passwordHash: passwordHash,

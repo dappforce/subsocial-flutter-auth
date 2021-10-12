@@ -3,6 +3,7 @@ import 'dart:io';
 import 'dart:math';
 import 'dart:typed_data';
 
+import 'package:collection/collection.dart';
 import 'package:encrypt/encrypt.dart';
 import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +11,7 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sembast/sembast.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
+import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
 import 'package:subsocial_flutter_auth/src/subsocial_auth.dart';
 import 'package:subsocial_sdk/generated/def.pb.dart';
 
@@ -21,6 +23,7 @@ void main() {
   setUpAll(() {
     disableSembastCooperator();
     registerFallbackValue(Uint8List(0));
+    registerFallbackValue(FakeVerifyHashParameters());
   });
   setUp(() {
     final pathProviderMock = MockPathProviderPlatform.setUp();
@@ -151,7 +154,7 @@ void main() {
     const incorrectPassword = '3323';
     final salt = SecureRandom(12).bytes;
     final hash = SecureRandom(12).bytes;
-    var account = generateRandomMockAccount(
+    final account = generateRandomMockAccount(
       passwordSalt: salt,
       passwordHash: hash,
     );
@@ -162,17 +165,17 @@ void main() {
       crypto: mockCrypto,
     );
 
-    when(() => mockCrypto.verifyHash(
-          plain: any(named: 'plain'),
-          expectedHash: any(named: 'expectedHash'),
-          salt: any(named: 'salt'),
-        )).thenAnswer((invocation) async => false);
+    when(() => mockCrypto.verifyHash(any()))
+        .thenAnswer((invocation) async => false);
 
-    when(() => mockCrypto.verifyHash(
-          plain: Uint8List.fromList(utf8.encode(correctPassword)),
-          expectedHash: any(named: 'expectedHash'),
-          salt: any(named: 'salt'),
-        )).thenAnswer((invocation) async => true);
+    when(() => mockCrypto.verifyHash(any(that: predicate<VerifyHashParameters>(
+          (params) {
+            return const DeepCollectionEquality().equals(
+              params.plain,
+              Uint8List.fromList(utf8.encode(correctPassword)),
+            );
+          },
+        )))).thenAnswer((invocation) async => true);
 
     final resultShouldBeFalse =
         await auth.verifyPassword(account, incorrectPassword);
@@ -201,7 +204,10 @@ void main() {
     expect(await auth.verifyPassword(account, password), true);
   });
   test('changePassword', () async {
-    final auth = await SubsocialAuth.defaultConfiguration(sdk: mockSdk);
+    final auth = await SubsocialAuth.defaultConfiguration(
+      sdk: mockSdk,
+      accountStore: getMemoryAuthStore(),
+    );
     const suri = '12121212';
     const name = 'tarek';
     const password = '1231';
