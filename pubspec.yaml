@@ -27,7 +27,6 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   freezed: ^0.14.5
-  hive_generator: ^1.1.1
   lint: ^1.7.2
   mocktail: ^0.1.4
 
