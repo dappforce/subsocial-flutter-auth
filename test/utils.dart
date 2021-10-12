@@ -18,9 +18,10 @@ AuthAccountStore getMemoryAuthStore() {
 }
 
 Future<void> removeAllAccounts(SubsocialAuth auth) async {
-  await Future.wait((await auth.getAccounts()).map((account) async {
+  final accounts = await auth.getAccounts();
+  for (final account in accounts) {
     await auth.removeAccount(account);
-  }));
+  }
 }
 
 Future<List<AuthAccount>> importRandomAccountsMocked(

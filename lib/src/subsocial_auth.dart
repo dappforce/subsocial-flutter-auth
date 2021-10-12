@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:state_notifier/state_notifier.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_factory.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/crypto.dart';
@@ -17,7 +16,7 @@ import 'package:subsocial_flutter_auth/src/sembast_auth_account_store.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
 
 /// [SubsocialAuth] manages subsocial accounts.
-class SubsocialAuth extends StateNotifier<AuthState> {
+class SubsocialAuth extends ValueNotifier<AuthState> {
   final Subsocial _sdk;
   final Crypto _crypto;
   final KeyDerivationStrategy _derivationStrategy;
@@ -76,8 +75,19 @@ class SubsocialAuth extends StateNotifier<AuthState> {
   }
 
   /// Retrieves the current [AuthState]
+  AuthState get state => super.value;
+
+  static List<AuthState> states = [];
+
+  @protected
+  set state(AuthState newValue) {
+    states.add(newValue);
+    super.value = newValue;
+  }
+
+  @protected
   @override
-  AuthState get state => super.state;
+  set value(AuthState newValue) => super.value = newValue;
 
   /// Used to wait for all update calls to finish
   @visibleForTesting

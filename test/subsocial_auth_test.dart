@@ -9,7 +9,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sembast/sembast.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
-import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
 import 'package:subsocial_flutter_auth/src/subsocial_auth.dart';
 import 'package:subsocial_sdk/generated/def.pb.dart';
@@ -248,14 +247,11 @@ void main() {
     );
 
     int invokedCounter = 0;
-    void _listener(AuthState s) {
+    void _listener() {
       invokedCounter++;
     }
 
-    final removeListener = auth.addListener(
-      _listener,
-      fireImmediately: false,
-    );
+    auth.addListener(_listener);
 
     final accounts = await importRandomAccountsMocked(3, auth, mockSdk);
 
@@ -272,7 +268,7 @@ void main() {
     await waitForAuthUpdate(auth);
     expect(invokedCounter, 8);
 
-    removeListener();
+    auth.removeListener(_listener);
   });
 
   test('add/remove/get account', () async {
