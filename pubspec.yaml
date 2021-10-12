@@ -9,7 +9,6 @@ environment:
 
 dependencies:
   encrypt: ^5.0.1
-  fast_immutable_collections: ^7.0.3
   flutter:
     sdk: flutter
   freezed_annotation: ^0.14.3

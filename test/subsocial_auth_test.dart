@@ -5,7 +5,6 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:encrypt/encrypt.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sembast/sembast.dart';
@@ -46,7 +45,7 @@ void main() {
   });
   test('generate mnemonic', () async {
     final auth = await SubsocialAuth.defaultConfiguration(sdk: mockSdk);
-    final IList<String> expectedWords = [
+    final List<String> expectedWords = [
       'sock',
       'obey',
       'cash',
@@ -62,7 +61,7 @@ void main() {
       'athlete',
       'juice',
       'dish',
-    ].lock;
+    ];
 
     when(() => mockSdk.generateAccount()).thenAnswer(
       (_) async => GeneratedAccount(
@@ -110,8 +109,7 @@ void main() {
       accountStore: mockStore,
     );
     final accounts =
-        List<AuthAccount>.generate(10, (index) => generateRandomMockAccount())
-            .lock;
+        List<AuthAccount>.generate(10, (index) => generateRandomMockAccount());
     final activeAccount = accounts[Random().nextInt(accounts.length)];
     when(() => mockStore.getStoredAccounts()).thenAnswer((_) async => accounts);
     when(() => mockStore.getActiveAccount()).thenAnswer((_) async => null);
@@ -307,7 +305,7 @@ void main() {
 
     final account1 = await importAccountMocked(auth, mockSdk);
 
-    expect(await auth.getAccounts(), [account1].lock);
+    expect(await auth.getAccounts(), [account1]);
 
     final account2 = await importAccountMocked(
       auth,
@@ -317,7 +315,7 @@ void main() {
 
     expect(account1, isNot(equals(account2)));
 
-    expect(await auth.getAccounts(), [account2].lock);
+    expect(await auth.getAccounts(), [account2]);
   });
 
   test('active account', () async {

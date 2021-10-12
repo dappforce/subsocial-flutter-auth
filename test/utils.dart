@@ -1,4 +1,5 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
+import 'dart:collection';
+
 import 'package:mocktail/mocktail.dart';
 import 'package:sembast/sembast_memory.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
@@ -22,7 +23,7 @@ Future<void> removeAllAccounts(SubsocialAuth auth) async {
   }));
 }
 
-Future<IList<AuthAccount>> importRandomAccountsMocked(
+Future<List<AuthAccount>> importRandomAccountsMocked(
   int n,
   SubsocialAuth auth,
   MockSubsocial mockSdk,
@@ -31,7 +32,7 @@ Future<IList<AuthAccount>> importRandomAccountsMocked(
   for (var i = 0; i < n; i++) {
     accounts.add(await importAccountMocked(auth, mockSdk));
   }
-  return accounts.lock;
+  return UnmodifiableListView(accounts);
 }
 
 Future<AuthAccount> importAccountMocked(

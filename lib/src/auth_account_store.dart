@@ -1,11 +1,10 @@
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 
 import 'models/auth_account.dart';
 
 abstract class AuthAccountStore implements ChangeNotifier {
   /// Returns a list of all stored accounts
-  Future<IList<AuthAccount>> getStoredAccounts();
+  Future<List<AuthAccount>> getStoredAccounts();
 
   /// Returns the active account
   Future<AuthAccount?> getActiveAccount();

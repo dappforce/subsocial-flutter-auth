@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:fast_immutable_collections/src/ilist/list_extension.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:path/path.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
@@ -85,11 +84,11 @@ void main() {
 
     await store.addAccount(account1);
 
-    expect(await store.getStoredAccounts(), [account1].lock);
+    expect(await store.getStoredAccounts(), [account1]);
 
     await store.addAccount(account2);
 
-    expect(await store.getStoredAccounts(), [account2].lock);
+    expect(await store.getStoredAccounts(), [account2]);
   });
 
   test('get account', () async {

@@ -19,7 +19,7 @@ class _$AuthStateTearOff {
 
   _AuthState call(
       {required AuthAccount? activeAccount,
-      required IList<AuthAccount> accounts}) {
+      required List<AuthAccount> accounts}) {
     return _AuthState(
       activeAccount: activeAccount,
       accounts: accounts,
@@ -36,7 +36,7 @@ mixin _$AuthState {
   AuthAccount? get activeAccount => throw _privateConstructorUsedError;
 
   /// List of the current stored accounts.
-  IList<AuthAccount> get accounts => throw _privateConstructorUsedError;
+  List<AuthAccount> get accounts => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
   $AuthStateCopyWith<AuthState> get copyWith =>
@@ -47,7 +47,7 @@ mixin _$AuthState {
 abstract class $AuthStateCopyWith<$Res> {
   factory $AuthStateCopyWith(AuthState value, $Res Function(AuthState) then) =
       _$AuthStateCopyWithImpl<$Res>;
-  $Res call({AuthAccount? activeAccount, IList<AuthAccount> accounts});
+  $Res call({AuthAccount? activeAccount, List<AuthAccount> accounts});
 
   $AuthAccountCopyWith<$Res>? get activeAccount;
 }
@@ -73,7 +73,7 @@ class _$AuthStateCopyWithImpl<$Res> implements $AuthStateCopyWith<$Res> {
       accounts: accounts == freezed
           ? _value.accounts
           : accounts // ignore: cast_nullable_to_non_nullable
-              as IList<AuthAccount>,
+              as List<AuthAccount>,
     ));
   }
 
@@ -95,7 +95,7 @@ abstract class _$AuthStateCopyWith<$Res> implements $AuthStateCopyWith<$Res> {
           _AuthState value, $Res Function(_AuthState) then) =
       __$AuthStateCopyWithImpl<$Res>;
   @override
-  $Res call({AuthAccount? activeAccount, IList<AuthAccount> accounts});
+  $Res call({AuthAccount? activeAccount, List<AuthAccount> accounts});
 
   @override
   $AuthAccountCopyWith<$Res>? get activeAccount;
@@ -123,7 +123,7 @@ class __$AuthStateCopyWithImpl<$Res> extends _$AuthStateCopyWithImpl<$Res>
       accounts: accounts == freezed
           ? _value.accounts
           : accounts // ignore: cast_nullable_to_non_nullable
-              as IList<AuthAccount>,
+              as List<AuthAccount>,
     ));
   }
 }
@@ -141,7 +141,7 @@ class _$_AuthState extends _AuthState {
   @override
 
   /// List of the current stored accounts.
-  final IList<AuthAccount> accounts;
+  final List<AuthAccount> accounts;
 
   @override
   String toString() {
@@ -175,7 +175,7 @@ class _$_AuthState extends _AuthState {
 abstract class _AuthState extends AuthState {
   const factory _AuthState(
       {required AuthAccount? activeAccount,
-      required IList<AuthAccount> accounts}) = _$_AuthState;
+      required List<AuthAccount> accounts}) = _$_AuthState;
   const _AuthState._() : super._();
 
   @override
@@ -185,7 +185,7 @@ abstract class _AuthState extends AuthState {
   @override
 
   /// List of the current stored accounts.
-  IList<AuthAccount> get accounts => throw _privateConstructorUsedError;
+  List<AuthAccount> get accounts => throw _privateConstructorUsedError;
   @override
   @JsonKey(ignore: true)
   _$AuthStateCopyWith<_AuthState> get copyWith =>

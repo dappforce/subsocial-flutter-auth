@@ -1,7 +1,7 @@
+import 'dart:collection';
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
@@ -101,9 +101,9 @@ class SubsocialAuth extends StateNotifier<AuthState> {
   }
 
   /// Generates new mnemonic
-  Future<IList<String>> generateMnemonic() async {
+  Future<List<String>> generateMnemonic() async {
     final generatedAccount = await _sdk.generateAccount();
-    return generatedAccount.seedPhrase.split(' ').lock;
+    return UnmodifiableListView(generatedAccount.seedPhrase.split(' '));
   }
 
   /// Import account and adds to the store.
@@ -215,8 +215,8 @@ class SubsocialAuth extends StateNotifier<AuthState> {
   }
 
   /// Returns all stored accounts.
-  Future<IList<AuthAccount>> getAccounts() async {
-    return _accountStore.getStoredAccounts();
+  Future<List<AuthAccount>> getAccounts() async {
+    return UnmodifiableListView(await _accountStore.getStoredAccounts());
   }
 
   /// Removes [AuthAccount], active account will be cleared if it's the same account.

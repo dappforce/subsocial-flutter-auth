@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:collection/collection.dart';
-import 'package:fast_immutable_collections/fast_immutable_collections.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sembast/blob.dart';
 import 'package:sembast/sembast.dart';
@@ -61,15 +60,14 @@ class SembastAuthAccountStore extends ChangeNotifier
   }
 
   @override
-  Future<IList<AuthAccount>> getStoredAccounts() async {
-    return (await _accountsStore.find(await _db))
+  Future<List<AuthAccount>> getStoredAccounts() async {
+    return UnmodifiableListView((await _accountsStore.find(await _db))
         .map(
           (snapshot) =>
               SembastAuthAccountMapper.fromNullableSembastMap(snapshot.value),
         )
         .whereNotNull()
-        .toList()
-        .lock;
+        .toList());
   }
 
   @override
