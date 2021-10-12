@@ -18,6 +18,18 @@ Random _rnd = Random();
 String getRandomString(int length) => String.fromCharCodes(Iterable.generate(
     length, (_) => _chars.codeUnitAt(_rnd.nextInt(_chars.length))));
 
+AccountSecret genRandomAccountSecret({
+  Uint8List? passwordSalt,
+  Uint8List? passwordHash,
+}) {
+  return AccountSecret(
+    encryptedSuri: SecureRandom(16).bytes,
+    encryptionKeySalt: SecureRandom(16).bytes,
+    passwordHash: passwordHash ?? SecureRandom(16).bytes,
+    passwordSalt: passwordSalt ?? SecureRandom(16).bytes,
+  );
+}
+
 AuthAccount generateRandomMockAccount({
   Uint8List? passwordSalt,
   Uint8List? passwordHash,
@@ -25,11 +37,9 @@ AuthAccount generateRandomMockAccount({
   return AuthAccount(
     localName: getRandomString(10),
     publicKey: getRandomString(30),
-    accountSecret: AccountSecret(
-      encryptedSuri: SecureRandom(16).bytes,
-      encryptionKeySalt: SecureRandom(16).bytes,
-      passwordHash: passwordHash ?? SecureRandom(16).bytes,
-      passwordSalt: passwordSalt ?? SecureRandom(16).bytes,
+    accountSecret: genRandomAccountSecret(
+      passwordSalt: passwordSalt,
+      passwordHash: passwordHash,
     ),
   );
 }

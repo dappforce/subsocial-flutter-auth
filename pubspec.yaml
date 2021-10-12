@@ -12,6 +12,7 @@ dependencies:
   encrypt: ^5.0.1
   flutter:
     sdk: flutter
+  flutter_secure_storage: ^4.2.1
   path: ^1.8.0
   path_provider: ^2.0.5
   pointycastle: ^3.3.4
