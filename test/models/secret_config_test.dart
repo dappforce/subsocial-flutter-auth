@@ -1,20 +1,21 @@
 import 'package:collection/collection.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:pointycastle/key_derivators/api.dart';
 import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 
 import '../utils.dart';
 
 final hashingConfigs = [
   Argon2SecretConfig(
-    type: 'id',
-    version: 0x10,
+    type: Argon2Parameters.ARGON2_id,
+    version: Argon2Parameters.ARGON2_VERSION_10,
     iterations: 2,
     memoryCost: 16,
     lanes: 1,
   ),
   Argon2SecretConfig(
-    type: 'id',
-    version: 0x13,
+    type: Argon2Parameters.ARGON2_id,
+    version: Argon2Parameters.ARGON2_VERSION_13,
     iterations: 2,
     memoryCost: 16,
     lanes: 1,

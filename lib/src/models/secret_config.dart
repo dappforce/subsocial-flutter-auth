@@ -1,6 +1,7 @@
 //ignore_for_file: public_member_api_docs
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
+import 'package:pointycastle/key_derivators/api.dart';
 
 @immutable
 class AccountSecretConfig {
@@ -17,7 +18,7 @@ class AccountSecretConfig {
 
   factory AccountSecretConfig.defaultConfig() {
     final hashing = Argon2SecretConfig(
-      type: 'id',
+      type: Argon2Parameters.ARGON2_id,
       version: 0x10,
       iterations: 2,
       memoryCost: 16,
@@ -131,10 +132,19 @@ abstract class EncryptionSecretConfig extends SecretConfig {
 class Argon2SecretConfig extends HashingSecretConfig {
   static const configType = 'argon2';
 
-  /// Argon2 type ['d', 'i', 'id']
-  final String type;
+  /// Argon2 type
+  ///
+  /// Only these values are valid:
+  /// [Argon2Parameters.ARGON2_i]
+  /// [Argon2Parameters.ARGON2_d]
+  /// [Argon2Parameters.ARGON2_id]
+  final int type;
 
-  /// Argon2 version [0x10, 0x13]
+  /// Argon2 version
+  ///
+  /// Only these values are valid:
+  /// [Argon2Parameters.ARGON2_VERSION_10]
+  /// [Argon2Parameters.ARGON2_VERSION_13]
   final int version;
 
   /// Argon2 iterations
@@ -153,8 +163,15 @@ class Argon2SecretConfig extends HashingSecretConfig {
     required this.iterations,
     required this.memoryCost,
     required this.lanes,
-  })  : assert(['d', 'i', 'id'].contains(type)),
-        assert([0x13, 0x10].contains(version));
+  })  : assert([
+          Argon2Parameters.ARGON2_i,
+          Argon2Parameters.ARGON2_d,
+          Argon2Parameters.ARGON2_id
+        ].contains(type)),
+        assert([
+          Argon2Parameters.ARGON2_VERSION_10,
+          Argon2Parameters.ARGON2_VERSION_13
+        ].contains(version));
 
   factory Argon2SecretConfig.fromMap(Map<String, dynamic> map) {
     if (map['configType'] != configType) {
@@ -164,7 +181,7 @@ class Argon2SecretConfig extends HashingSecretConfig {
       );
     }
     return Argon2SecretConfig(
-      type: map['type']! as String,
+      type: map['type']! as int,
       version: map['version']! as int,
       iterations: map['iterations']! as int,
       memoryCost: map['memoryCost']! as int,
