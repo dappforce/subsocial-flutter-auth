@@ -112,11 +112,17 @@ abstract class SecretConfig {
 /// Indicates that this config should be used with hashing
 abstract class HashingSecretConfig extends SecretConfig {
   const HashingSecretConfig();
+
+  factory HashingSecretConfig.fromMap(Map<String, dynamic> map) =>
+      SecretConfig.fromMap(map) as HashingSecretConfig;
 }
 
 /// Indicates that this config should be used with encryption
 abstract class EncryptionSecretConfig extends SecretConfig {
   const EncryptionSecretConfig();
+
+  factory EncryptionSecretConfig.fromMap(Map<String, dynamic> map) =>
+      SecretConfig.fromMap(map) as EncryptionSecretConfig;
 }
 
 //// Hashing / Key derivation
