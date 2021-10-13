@@ -57,6 +57,10 @@ Future<AuthAccount> importAccountMocked(
   );
 }
 
+extension IterableX<T> on Iterable<T> {
+  List<T> toUnmodifiableListView() => UnmodifiableListView(this);
+}
+
 // Future<void> waitForAuthUpdate(SubsocialAuth auth) async {
 //   int iterationCounter = 0;
 //   while (auth.updateCallCounter != 0) {

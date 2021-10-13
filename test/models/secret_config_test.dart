@@ -1,8 +1,10 @@
+import 'package:collection/collection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 
-final _secretConfigs = [
-  const DefaultAesSecretConfig(),
+import '../utils.dart';
+
+final hashingConfigs = [
   Argon2SecretConfig(
     type: 'id',
     version: 0x10,
@@ -10,29 +12,44 @@ final _secretConfigs = [
     memoryCost: 16,
     lanes: 1,
   ),
-];
+  Argon2SecretConfig(
+    type: 'id',
+    version: 0x13,
+    iterations: 2,
+    memoryCost: 16,
+    lanes: 1,
+  ),
+].toUnmodifiableListView();
 
-final _accountConfigs = _secretConfigs
+final encryptionConfigs = [
+  const DefaultAesSecretConfig(),
+].toUnmodifiableListView();
+
+final secretConfigs = [
+  ...hashingConfigs,
+  ...encryptionConfigs,
+].toUnmodifiableListView();
+
+final accountConfigs = hashingConfigs
     .map((sc1) {
-      for (final sc2 in _secretConfigs) {
-        for (final sc3 in _secretConfigs) {
-          if (sc1 != sc2 && sc2 != sc3 && sc3 != sc1) {
-            return AccountSecretConfig.internal(
-              hashingConfig: sc1,
-              keyDerivationConfig: sc2,
-              suriEncryptionConfig: sc3,
-            );
-          }
+      for (final sc2 in hashingConfigs) {
+        for (final sc3 in encryptionConfigs) {
+          return AccountSecretConfig.internal(
+            hashingConfig: sc1,
+            keyDerivationConfig: sc2,
+            suriEncryptionConfig: sc3,
+          );
         }
       }
     })
-    .whereType<AccountSecretConfig>()
-    .followedBy([AccountSecretConfig.defaultConfig()]);
+    .whereNotNull()
+    .followedBy([AccountSecretConfig.defaultConfig()])
+    .toUnmodifiableListView();
 
 void main() {
   group('AccountSecretConfig', () {
     test('toMap/fromMap', () {
-      for (final config in _accountConfigs) {
+      for (final config in accountConfigs) {
         final convertedMap = config.toMap();
         final convertedConfig = AccountSecretConfig.fromMap(convertedMap);
         expect(convertedConfig, config);
@@ -43,7 +60,7 @@ void main() {
   });
   group('SecretConfig', () {
     test('toMap/fromMap', () {
-      for (final config in _secretConfigs) {
+      for (final config in secretConfigs) {
         final convertedMap = config.toMap();
         final convertedConfig = SecretConfig.fromMap(convertedMap);
         expect(convertedConfig, config);

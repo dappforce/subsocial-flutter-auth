@@ -4,9 +4,9 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class AccountSecretConfig {
-  final SecretConfig hashingConfig;
-  final SecretConfig keyDerivationConfig;
-  final SecretConfig suriEncryptionConfig;
+  final HashingSecretConfig hashingConfig;
+  final HashingSecretConfig keyDerivationConfig;
+  final EncryptionSecretConfig suriEncryptionConfig;
 
   @visibleForTesting
   const AccountSecretConfig.internal({
@@ -34,11 +34,14 @@ class AccountSecretConfig {
   factory AccountSecretConfig.fromMap(Map<String, dynamic> map) {
     return AccountSecretConfig.internal(
       hashingConfig:
-          SecretConfig.fromMap(map['hashingConfig']! as Map<String, dynamic>),
+          SecretConfig.fromMap(map['hashingConfig']! as Map<String, dynamic>)
+              as HashingSecretConfig,
       keyDerivationConfig: SecretConfig.fromMap(
-          map['keyDerivationConfig']! as Map<String, dynamic>),
+              map['keyDerivationConfig']! as Map<String, dynamic>)
+          as HashingSecretConfig,
       suriEncryptionConfig: SecretConfig.fromMap(
-          map['suriEncryptionConfig']! as Map<String, dynamic>),
+              map['suriEncryptionConfig']! as Map<String, dynamic>)
+          as EncryptionSecretConfig,
     );
   }
 
@@ -106,10 +109,20 @@ abstract class SecretConfig {
           );
 }
 
+/// Indicates that this config should be used with hashing
+abstract class HashingSecretConfig extends SecretConfig {
+  const HashingSecretConfig();
+}
+
+/// Indicates that this config should be used with encryption
+abstract class EncryptionSecretConfig extends SecretConfig {
+  const EncryptionSecretConfig();
+}
+
 //// Hashing / Key derivation
 
 /// Argon2 config
-class Argon2SecretConfig extends SecretConfig {
+class Argon2SecretConfig extends HashingSecretConfig {
   static const configType = 'argon2';
 
   /// Argon2 type ['d', 'i', 'id']
@@ -169,7 +182,7 @@ class Argon2SecretConfig extends SecretConfig {
 
 //// Encryption / Decryption
 
-class DefaultAesSecretConfig extends SecretConfig {
+class DefaultAesSecretConfig extends EncryptionSecretConfig {
   static const configType = 'default_aes';
 
   /// Creates [DefaultAesSecretConfig]
