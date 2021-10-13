@@ -16,6 +16,7 @@ import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
 import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 import 'package:subsocial_flutter_auth/src/secure_account_secret_store.dart';
 import 'package:subsocial_flutter_auth/src/sembast_auth_account_store.dart';
+import 'package:subsocial_flutter_auth/src/utils.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
 
 /// [SubsocialAuth] manages subsocial accounts.
@@ -132,6 +133,14 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     await _accountStore.addAccount(authAccount);
     await _secretStore.addSecret(authAccount.publicKey, accountSecret);
 
+    // clears vars
+    //ignore: parameter_assignments
+    password = '';
+    accountSecret.encryptionKeySalt.fillWithZeros();
+    accountSecret.encryptedSuri.fillWithZeros();
+    accountSecret.passwordSalt.fillWithZeros();
+    accountSecret.passwordHash.fillWithZeros();
+
     await update();
 
     return authAccount;
@@ -164,6 +173,10 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     final _ = await _sdk.importAccount(
       suri: utf8.decode(suriBytes),
     );
+
+    //clear vars
+    suriBytes.fillWithZeros();
+
     return true;
   }
 
@@ -273,10 +286,18 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
       salt: secret.encryptionKeySalt,
       config: secretConfig.keyDerivationConfig,
     ));
-    return _crypto.decrypt(DecryptParameters(
+    final result = _crypto.decrypt(DecryptParameters(
       key: key,
       cipher: secret.encryptedSuri,
       config: secretConfig.suriEncryptionConfig,
     ));
+
+    // clears vars
+    //ignore: parameter_assignments
+    password = '';
+    passwordBytes.fillWithZeros();
+    key.fillWithZeros();
+
+    return result;
   }
 }

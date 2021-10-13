@@ -5,6 +5,7 @@ import 'package:subsocial_flutter_auth/src/crypto.dart';
 import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
 import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
+import 'package:subsocial_flutter_auth/src/utils.dart';
 
 import 'models/account_secret.dart';
 
@@ -77,11 +78,16 @@ class AccountSecretFactory {
       outputLength: _passwordHashLength,
       config: accountSecretConfig.passwordHashingConfig,
     ));
-    return AccountSecret(
+    final result = AccountSecret(
       encryptedSuri: encryptedSuri,
       passwordHash: passwordHash,
       passwordSalt: _passwordSalt,
       encryptionKeySalt: _encryptionKeySalt,
     );
+
+    // clear vars
+    encryptionKey.fillWithZeros();
+
+    return result;
   }
 }
