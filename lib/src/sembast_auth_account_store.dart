@@ -99,7 +99,7 @@ extension SembastAuthAccountMapper on AuthAccount {
       {
         'name': localName,
         'publicKey': publicKey,
-        'accountSecretConfig': accountSecretConfig,
+        'accountSecretConfig': accountSecretConfig.toMap(),
       },
     );
   }
