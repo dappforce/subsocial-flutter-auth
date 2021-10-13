@@ -11,6 +11,7 @@ import 'package:subsocial_flutter_auth/src/crypto.dart';
 import 'package:subsocial_flutter_auth/src/models/account_secret.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
 
 const _chars = 'AaBbCcDdEeFfGgHhIiJjKkLlMmNnOoPpQqRrSsTtUuVvWwXxYyZz1234567890';
@@ -35,6 +36,7 @@ AuthAccount generateRandomMockAccount() {
   return AuthAccount(
     localName: getRandomString(10),
     publicKey: getRandomString(30),
+    accountSecretConfig: AccountSecretConfig.defaultConfig(),
   );
 }
 
@@ -55,6 +57,8 @@ class MockAuthAccountStore extends Mock implements AuthAccountStore {}
 class MockCrypto extends Mock implements Crypto {}
 
 class FakeVerifyHashParameters extends Fake implements VerifyHashParameters {}
+
+class FakeAccountSecretConfig extends Fake implements AccountSecretConfig {}
 
 class MockSecureStorage extends Mock implements FlutterSecureStorage {
   final Map<String, String> values = {};

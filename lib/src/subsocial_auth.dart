@@ -13,6 +13,7 @@ import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_state.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 import 'package:subsocial_flutter_auth/src/secure_account_secret_store.dart';
 import 'package:subsocial_flutter_auth/src/sembast_auth_account_store.dart';
 import 'package:subsocial_sdk/subsocial_sdk.dart';
@@ -119,6 +120,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     final authAccount = AuthAccount(
       localName: localName,
       publicKey: publicKey,
+      accountSecretConfig: AccountSecretConfig.defaultConfig(),
     );
 
     final accountSecret = await _accountSecretFactory.createFromPlainString(

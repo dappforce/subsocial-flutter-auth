@@ -6,6 +6,7 @@ import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
+import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 
 /// [SembastAuthAccountStore] stores accounts and the current active account on disk
 /// using sembast package.
@@ -98,6 +99,7 @@ extension SembastAuthAccountMapper on AuthAccount {
       {
         'name': localName,
         'publicKey': publicKey,
+        'accountSecretConfig': accountSecretConfig,
       },
     );
   }
@@ -111,6 +113,8 @@ extension SembastAuthAccountMapper on AuthAccount {
     return AuthAccount(
       localName: map['name']! as String,
       publicKey: map['publicKey']! as String,
+      accountSecretConfig: AccountSecretConfig.fromMap(
+          map['accountSecretConfig']! as Map<String, dynamic>),
     );
   }
 }
