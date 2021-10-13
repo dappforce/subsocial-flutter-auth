@@ -8,13 +8,13 @@ import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 
-/// [SembastAuthAccountStore] stores accounts and the current active account on disk
+/// [SembastAuthAccountStore] stores accounts and the current account on disk
 /// using sembast package.
 class SembastAuthAccountStore extends ChangeNotifier
     implements AuthAccountStore {
   late Completer<Database> _databaseCompleter;
   final _accountsStore = StoreRef<String, Map<String, Object?>>('accounts');
-  final _activeAccountStore = StoreRef<int, String>('active_account');
+  final _currentAccountStore = StoreRef<int, String>('current_account');
 
   /// Creates [SembastAuthAccountStore].
   SembastAuthAccountStore(
@@ -53,8 +53,8 @@ class SembastAuthAccountStore extends ChangeNotifier
   }
 
   @override
-  Future<AuthAccount?> getActiveAccount() async {
-    final publicKey = await _activeAccountStore.record(0).get(await _db);
+  Future<AuthAccount?> getCurrentAccount() async {
+    final publicKey = await _currentAccountStore.record(0).get(await _db);
     if (publicKey == null) return null;
     return getAccount(publicKey);
   }
@@ -77,15 +77,15 @@ class SembastAuthAccountStore extends ChangeNotifier
   }
 
   @override
-  Future<bool> setActiveAccount(AuthAccount account) async {
-    await _activeAccountStore.record(0).put(await _db, account.publicKey);
+  Future<bool> setCurrentAccount(AuthAccount account) async {
+    await _currentAccountStore.record(0).put(await _db, account.publicKey);
     notifyListeners();
     return true;
   }
 
   @override
-  Future<bool> unsetActiveAccount() async {
-    await _activeAccountStore.record(0).delete(await _db);
+  Future<bool> unsetCurrentAccount() async {
+    await _currentAccountStore.record(0).delete(await _db);
     notifyListeners();
     return true;
   }

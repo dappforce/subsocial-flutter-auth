@@ -45,7 +45,7 @@ void main() {
     final auth = await SubsocialAuth.defaultConfiguration(sdk: mockSdk);
     expect(auth.state.isLoggedIn, false);
     expect(auth.state.accounts.isEmpty, true);
-    expect(auth.state.activeAccount, isNull);
+    expect(auth.state.currentAccount, isNull);
   });
   test('generate mnemonic', () async {
     final auth = await SubsocialAuth.defaultConfiguration(sdk: mockSdk);
@@ -119,26 +119,26 @@ void main() {
         List<AuthAccount>.generate(10, (index) => generateRandomMockAccount());
     final activeAccount = accounts[Random().nextInt(accounts.length)];
     when(() => mockStore.getStoredAccounts()).thenAnswer((_) async => accounts);
-    when(() => mockStore.getActiveAccount()).thenAnswer((_) async => null);
+    when(() => mockStore.getCurrentAccount()).thenAnswer((_) async => null);
 
     expect(auth.state.isLoggedIn, false);
     expect(auth.state.accounts.isEmpty, true);
-    expect(auth.state.activeAccount, isNull);
+    expect(auth.state.currentAccount, isNull);
 
     await auth.update();
 
     expect(auth.state.isLoggedIn, false);
     expect(auth.state.accounts, accounts);
-    expect(auth.state.activeAccount, isNull);
+    expect(auth.state.currentAccount, isNull);
 
-    when(() => mockStore.getActiveAccount())
+    when(() => mockStore.getCurrentAccount())
         .thenAnswer((_) async => activeAccount);
 
     await auth.update();
 
     expect(auth.state.isLoggedIn, true);
     expect(auth.state.accounts, accounts);
-    expect(auth.state.activeAccount, activeAccount);
+    expect(auth.state.currentAccount, activeAccount);
   });
   test('currentSignerId', () async {
     final auth = await SubsocialAuth.defaultConfiguration(sdk: mockSdk);
@@ -265,10 +265,10 @@ void main() {
 
     expect(invokedCounter, 3);
 
-    await auth.setActiveAccount(accounts[0]);
+    await auth.setCurrentAccount(accounts[0]);
     expect(invokedCounter, 4);
 
-    await auth.unsetActiveAccount();
+    await auth.unsetCurrentAccount();
     expect(invokedCounter, 5);
 
     await removeAllAccounts(auth);
@@ -330,26 +330,26 @@ void main() {
     );
     final accounts = await importRandomAccountsMocked(3, auth, mockSdk);
 
-    expect(await auth.getActiveAccount(), isNull);
+    expect(await auth.getCurrentAccount(), isNull);
 
-    await auth.setActiveAccount(accounts[1]);
+    await auth.setCurrentAccount(accounts[1]);
 
-    expect(await auth.getActiveAccount(), accounts[1]);
+    expect(await auth.getCurrentAccount(), accounts[1]);
 
-    await auth.unsetActiveAccount();
+    await auth.unsetCurrentAccount();
 
-    expect(await auth.getActiveAccount(), isNull);
+    expect(await auth.getCurrentAccount(), isNull);
 
-    await auth.setActiveAccount(accounts[0]);
+    await auth.setCurrentAccount(accounts[0]);
 
-    expect(await auth.getActiveAccount(), accounts[0]);
+    expect(await auth.getCurrentAccount(), accounts[0]);
 
     // no change to accounts
     expect((await auth.getAccounts()).toSet(), accounts.toSet());
 
     await auth.removeAccount(accounts[0]);
     expect(
-      await auth.getActiveAccount(),
+      await auth.getCurrentAccount(),
       isNull,
       reason: 'removing active account will unset it',
     );

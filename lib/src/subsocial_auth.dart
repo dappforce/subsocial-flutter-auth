@@ -96,7 +96,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   /// Updates the current [AuthState]
   Future<AuthState> update() async {
     return state = AuthState(
-      activeAccount: await getActiveAccount(),
+      currentAccount: await getCurrentAccount(),
       accounts: await getAccounts(),
     );
   }
@@ -230,10 +230,10 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     return UnmodifiableListView(await _accountStore.getStoredAccounts());
   }
 
-  /// Removes [AuthAccount], active account will be cleared if it's the same account.
+  /// Removes [AuthAccount], current account will be cleared if it's the same account.
   Future<void> removeAccount(AuthAccount account) async {
-    if (state.activeAccount?.publicKey == account.publicKey) {
-      await unsetActiveAccount();
+    if (state.currentAccount?.publicKey == account.publicKey) {
+      await unsetCurrentAccount();
     }
     await _accountStore.removeAccount(account.publicKey);
 
@@ -241,13 +241,13 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   }
 
   /// Returns the current active account, returns null if there is no active account.
-  Future<AuthAccount?> getActiveAccount() async {
-    return _accountStore.getActiveAccount();
+  Future<AuthAccount?> getCurrentAccount() async {
+    return _accountStore.getCurrentAccount();
   }
 
   /// Sets the current active account.
-  Future<bool> setActiveAccount(AuthAccount account) async {
-    final res = await _accountStore.setActiveAccount(account);
+  Future<bool> setCurrentAccount(AuthAccount account) async {
+    final res = await _accountStore.setCurrentAccount(account);
 
     await update();
 
@@ -255,8 +255,8 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   }
 
   /// Clears the current active account.
-  Future<bool> unsetActiveAccount() async {
-    final res = await _accountStore.unsetActiveAccount();
+  Future<bool> unsetCurrentAccount() async {
+    final res = await _accountStore.unsetCurrentAccount();
 
     await update();
 

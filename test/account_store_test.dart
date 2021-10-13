@@ -112,19 +112,19 @@ void main() {
       await store.addAccount(account);
     }));
 
-    expect(await store.getActiveAccount(), isNull);
+    expect(await store.getCurrentAccount(), isNull);
 
-    await store.setActiveAccount(accounts[1]);
+    await store.setCurrentAccount(accounts[1]);
 
-    expect(await store.getActiveAccount(), accounts[1]);
+    expect(await store.getCurrentAccount(), accounts[1]);
 
-    await store.unsetActiveAccount();
+    await store.unsetCurrentAccount();
 
-    expect(await store.getActiveAccount(), isNull);
+    expect(await store.getCurrentAccount(), isNull);
 
-    await store.setActiveAccount(accounts[4]);
+    await store.setCurrentAccount(accounts[4]);
 
-    expect(await store.getActiveAccount(), accounts[4]);
+    expect(await store.getCurrentAccount(), accounts[4]);
 
     // no change to accounts
     expect((await store.getStoredAccounts()).toSet(), accounts.toSet());

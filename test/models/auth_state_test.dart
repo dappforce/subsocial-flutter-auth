@@ -9,12 +9,12 @@ void main() {
     final accounts = List.generate(10, (index) => generateRandomMockAccount());
 
     final obj1 = AuthState(
-      activeAccount: currentAccount,
+      currentAccount: currentAccount,
       accounts: accounts,
     );
 
     final obj2 = AuthState(
-      activeAccount: currentAccount,
+      currentAccount: currentAccount,
       accounts: accounts,
     );
 
@@ -22,12 +22,12 @@ void main() {
     expect(obj1.hashCode == obj2.hashCode, isTrue);
 
     final obj3 = AuthState(
-      activeAccount: null,
+      currentAccount: null,
       accounts: accounts,
     );
 
     final obj4 = AuthState(
-      activeAccount: null,
+      currentAccount: null,
       accounts: accounts,
     );
 

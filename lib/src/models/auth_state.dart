@@ -2,32 +2,31 @@ import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show immutable;
 import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
 
-/// [AuthState] represents the current state of stored account and the current
-/// active account.
+/// [AuthState] represents the current state of stored account and the current account.
 @immutable
 class AuthState {
   /// The current active account.
-  final AuthAccount? activeAccount;
+  final AuthAccount? currentAccount;
 
   /// List of the current stored accounts.
   final List<AuthAccount> accounts;
 
   /// Creates [AuthState]
   const AuthState({
-    required this.activeAccount,
+    required this.currentAccount,
     required this.accounts,
   });
 
-  /// Creates an empty state with no active account and no stored accounts
+  /// Creates an empty state with no current account and no stored accounts
   factory AuthState.empty() => const AuthState(
-        activeAccount: null,
+        currentAccount: null,
         accounts: [],
       );
 
   /// Returns whether there is a current active account
-  bool get isLoggedIn => activeAccount != null;
+  bool get isLoggedIn => currentAccount != null;
 
-  List<Object?> get _props => [activeAccount, accounts];
+  List<Object?> get _props => [currentAccount, accounts];
 
   @override
   bool operator ==(Object other) =>

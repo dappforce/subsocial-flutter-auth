@@ -5,14 +5,14 @@ abstract class AuthAccountStore {
   /// Returns a list of all stored accounts
   Future<List<AuthAccount>> getStoredAccounts();
 
-  /// Returns the active account
-  Future<AuthAccount?> getActiveAccount();
+  /// Returns the current account
+  Future<AuthAccount?> getCurrentAccount();
 
   /// Clears the current active account
-  Future<bool> unsetActiveAccount();
+  Future<bool> unsetCurrentAccount();
 
   /// Sets the current account account
-  Future<bool> setActiveAccount(AuthAccount account);
+  Future<bool> setCurrentAccount(AuthAccount account);
 
   /// Retrieves an account by its public key.
   Future<AuthAccount?> getAccount(String publicKey);
