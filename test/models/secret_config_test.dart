@@ -35,7 +35,7 @@ final accountConfigs = hashingConfigs
       for (final sc2 in hashingConfigs) {
         for (final sc3 in encryptionConfigs) {
           return AccountSecretConfig.internal(
-            hashingConfig: sc1,
+            passwordHashingConfig: sc1,
             keyDerivationConfig: sc2,
             suriEncryptionConfig: sc3,
           );

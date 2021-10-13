@@ -31,6 +31,7 @@ class Crypto {
         plain: parameters.plain,
         salt: parameters.salt,
         outputLength: parameters.expectedHash.length,
+        config: parameters.config,
       ),
     );
     return const DeepCollectionEquality()

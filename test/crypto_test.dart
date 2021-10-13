@@ -5,6 +5,7 @@ import 'package:encrypt/encrypt.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subsocial_flutter_auth/src/crypto.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 
 void main() {
   test('test hash verifyHash', () async {
@@ -17,6 +18,7 @@ void main() {
       plain: plainBytes,
       salt: saltBytes,
       outputLength: outputLength,
+      config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
     ));
 
     expect(hashedBytes.length, equals(outputLength));
@@ -25,6 +27,7 @@ void main() {
       plain: plainBytes,
       expectedHash: hashedBytes,
       salt: saltBytes,
+      config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
     ));
 
     expect(verifyResultTrue, equals(true));
@@ -34,6 +37,7 @@ void main() {
       plain: Uint8List.fromList(utf8.encode('not the plain')),
       expectedHash: hashedBytes,
       salt: saltBytes,
+      config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
     ));
 
     expect(verifyResultNotTheSamePlain, equals(false));
@@ -43,6 +47,7 @@ void main() {
       plain: plainBytes,
       expectedHash: hashedBytes,
       salt: SecureRandom(16).bytes, // not same salt
+      config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
     ));
 
     expect(verifyResultNotTheSameSalt, equals(false));
@@ -62,11 +67,13 @@ void main() {
       plain: passwordBytes,
       salt: passwordSaltBytes,
       outputLength: keyLength,
+      config: AccountSecretConfig.defaultConfig().keyDerivationConfig,
     ));
 
     final encryptedBytes = await crypto.encrypt(EncryptParameters(
       key: key,
       plain: plainBytes,
+      config: AccountSecretConfig.defaultConfig().suriEncryptionConfig,
     ));
 
     expect(encryptedBytes, isNot(equals(plainBytes)));
@@ -74,6 +81,7 @@ void main() {
     final decryptedBytes = await crypto.decrypt(DecryptParameters(
       key: key,
       cipher: encryptedBytes,
+      config: AccountSecretConfig.defaultConfig().suriEncryptionConfig,
     ));
 
     expect(decryptedBytes, equals(plainBytes));

@@ -126,6 +126,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     final accountSecret = await _accountSecretFactory.createFromPlainString(
       password: password,
       suri: suri,
+      accountSecretConfig: authAccount.accountSecretConfig,
     );
 
     await _accountStore.addAccount(authAccount);
@@ -176,10 +177,10 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   Future<bool> verifyPassword(AuthAccount account, String password) async {
     final secret = (await _secretStore.getSecret(account.publicKey))!;
     return _crypto.verifyHash(VerifyHashParameters(
-      plain: Uint8List.fromList(utf8.encode(password)),
-      expectedHash: secret.passwordHash,
-      salt: secret.passwordSalt,
-    ));
+        plain: Uint8List.fromList(utf8.encode(password)),
+        expectedHash: secret.passwordHash,
+        salt: secret.passwordSalt,
+        config: account.accountSecretConfig.passwordHashingConfig));
   }
 
   /// Changes the password of an account, given its old password [password] and
@@ -199,6 +200,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     final newSecret = await _accountSecretFactory.createFromPlainBytes(
       password: Uint8List.fromList(utf8.encode(newPassword)),
       suri: suriBytes,
+      accountSecretConfig: account.accountSecretConfig,
     );
 
     // will override the old secret since they have the same public key.
@@ -263,16 +265,18 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
 
   Future<Uint8List> _decryptSuri(AuthAccount account, String password) async {
     final secret = (await _secretStore.getSecret(account.publicKey))!;
-
+    final secretConfig = account.accountSecretConfig;
     final passwordBytes = Uint8List.fromList(utf8.encode(password));
-    final key = await _derivationStrategy.driveKey(
-      _encryptionKeyLength,
-      passwordBytes,
-      secret.encryptionKeySalt,
-    );
+    final key = await _derivationStrategy.driveKey(HashParameters(
+      outputLength: _encryptionKeyLength,
+      plain: passwordBytes,
+      salt: secret.encryptionKeySalt,
+      config: secretConfig.keyDerivationConfig,
+    ));
     return _crypto.decrypt(DecryptParameters(
       key: key,
       cipher: secret.encryptedSuri,
+      config: secretConfig.suriEncryptionConfig,
     ));
   }
 }

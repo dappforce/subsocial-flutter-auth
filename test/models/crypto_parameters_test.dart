@@ -4,8 +4,10 @@ import 'dart:typed_data';
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 
 Uint8List _rndb(int length) => SecureRandom(length).bytes;
+
 int _rnd(int max) => Random().nextInt(max);
 
 void main() {
@@ -19,12 +21,14 @@ void main() {
         plain: plain,
         salt: slat,
         outputLength: outputLength,
+        config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
       );
 
       final obj2 = HashParameters(
         plain: plain,
         salt: slat,
         outputLength: outputLength,
+        config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
       );
 
       expect(obj1 == obj2 && obj2 == obj1, isTrue);
@@ -36,6 +40,7 @@ void main() {
         plain: _rndb(16),
         salt: _rndb(16),
         outputLength: _rnd(255),
+        config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
       );
 
       final map = parameter.toMap();
@@ -59,12 +64,14 @@ void main() {
         plain: plain,
         salt: slat,
         expectedHash: expectedHash,
+        config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
       );
 
       final obj2 = VerifyHashParameters(
         plain: plain,
         salt: slat,
         expectedHash: expectedHash,
+        config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
       );
 
       expect(obj1 == obj2 && obj2 == obj1, isTrue);
@@ -76,6 +83,7 @@ void main() {
         plain: _rndb(16),
         salt: _rndb(16),
         expectedHash: _rndb(16),
+        config: AccountSecretConfig.defaultConfig().passwordHashingConfig,
       );
 
       final map = parameter.toMap();
@@ -97,11 +105,13 @@ void main() {
       final obj1 = EncryptParameters(
         key: key,
         plain: plain,
+        config: AccountSecretConfig.defaultConfig().suriEncryptionConfig,
       );
 
       final obj2 = EncryptParameters(
         key: key,
         plain: plain,
+        config: AccountSecretConfig.defaultConfig().suriEncryptionConfig,
       );
 
       expect(obj1 == obj2 && obj2 == obj1, isTrue);
@@ -112,6 +122,7 @@ void main() {
       final parameter = EncryptParameters(
         key: _rndb(16),
         plain: _rndb(16),
+        config: AccountSecretConfig.defaultConfig().suriEncryptionConfig,
       );
 
       final map = parameter.toMap();
@@ -133,11 +144,13 @@ void main() {
       final obj1 = DecryptParameters(
         key: key,
         cipher: cipher,
+        config: AccountSecretConfig.defaultConfig().suriEncryptionConfig,
       );
 
       final obj2 = DecryptParameters(
         key: key,
         cipher: cipher,
+        config: AccountSecretConfig.defaultConfig().suriEncryptionConfig,
       );
 
       expect(obj1 == obj2 && obj2 == obj1, isTrue);
@@ -148,6 +161,7 @@ void main() {
       final parameter = DecryptParameters(
         key: _rndb(16),
         cipher: _rndb(16),
+        config: AccountSecretConfig.defaultConfig().suriEncryptionConfig,
       );
 
       final map = parameter.toMap();

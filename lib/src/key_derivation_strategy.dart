@@ -11,11 +11,7 @@ class KeyDerivationStrategy {
   KeyDerivationStrategy(this._crypto);
 
   /// Drive an encryption key of length [length] from a [password] and a [salt]
-  Future<Uint8List> driveKey(int length, Uint8List password, Uint8List salt) {
-    return _crypto.hash(HashParameters(
-      plain: password,
-      salt: salt,
-      outputLength: length,
-    ));
+  Future<Uint8List> driveKey(HashParameters parameters) {
+    return _crypto.hash(parameters);
   }
 }

@@ -4,13 +4,13 @@ import 'package:flutter/foundation.dart';
 
 @immutable
 class AccountSecretConfig {
-  final HashingSecretConfig hashingConfig;
+  final HashingSecretConfig passwordHashingConfig;
   final HashingSecretConfig keyDerivationConfig;
   final EncryptionSecretConfig suriEncryptionConfig;
 
   @visibleForTesting
   const AccountSecretConfig.internal({
-    required this.hashingConfig,
+    required this.passwordHashingConfig,
     required this.keyDerivationConfig,
     required this.suriEncryptionConfig,
   });
@@ -25,7 +25,7 @@ class AccountSecretConfig {
     );
     const encryption = DefaultAesSecretConfig();
     return AccountSecretConfig.internal(
-      hashingConfig: hashing,
+      passwordHashingConfig: hashing,
       keyDerivationConfig: hashing,
       suriEncryptionConfig: encryption,
     );
@@ -33,7 +33,7 @@ class AccountSecretConfig {
 
   factory AccountSecretConfig.fromMap(Map<String, dynamic> map) {
     return AccountSecretConfig.internal(
-      hashingConfig:
+      passwordHashingConfig:
           SecretConfig.fromMap(map['hashingConfig']! as Map<String, dynamic>)
               as HashingSecretConfig,
       keyDerivationConfig: SecretConfig.fromMap(
@@ -46,13 +46,13 @@ class AccountSecretConfig {
   }
 
   Map<String, dynamic> toMap() => {
-        'hashingConfig': hashingConfig.toMap(),
+        'hashingConfig': passwordHashingConfig.toMap(),
         'keyDerivationConfig': keyDerivationConfig.toMap(),
         'suriEncryptionConfig': suriEncryptionConfig.toMap(),
       };
 
   List<Object?> get _props => [
-        hashingConfig,
+        passwordHashingConfig,
         keyDerivationConfig,
         suriEncryptionConfig,
       ];
