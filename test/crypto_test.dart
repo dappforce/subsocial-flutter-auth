@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 import 'dart:typed_data';
 
@@ -10,6 +11,13 @@ import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 import 'models/secret_config_test.dart';
 
 void main() {
+  test('generateRandomBytes', () {
+    final crypto = Crypto();
+    final bytes1 = crypto.generateRandomBytes(100);
+    final bytes2 = crypto.generateRandomBytes(100);
+    expect(bytes1, isNot(bytes2));
+  });
+
   group(
       'test hash verifyHash with all hashing configs [len: ${hashingConfigs.length}]',
       () {
@@ -101,6 +109,38 @@ void main() {
 
         expect(decryptedBytes, equals(plainBytes));
       });
+    }
+  });
+
+  ///// Isolate function tests
+
+  Future<void> genericHashTest({
+    required HashingSecretConfig config,
+    required FutureOr<Uint8List> Function(Map<String, dynamic> args) hashFn,
+  }) async {
+    final plainBytes = Uint8List.fromList(utf8.encode('Hello this is a Test'));
+    final saltBytes = SecureRandom(16).bytes;
+    const outputLength = 32;
+
+    final hashedBytes = await hashFn(HashParameters(
+      plain: plainBytes,
+      salt: saltBytes,
+      outputLength: outputLength,
+      config: config,
+    ).toMap());
+
+    expect(hashedBytes.length, equals(outputLength));
+  }
+
+  group('argon2 hash', () {
+    for (final config in hashingConfigs) {
+      expect(
+        () => genericHashTest(
+          config: config,
+          hashFn: argon2Hash,
+        ),
+        config is Argon2SecretConfig ? returnsNormally : throwsA(anything),
+      );
     }
   });
 }
