@@ -83,11 +83,8 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   /// Retrieves the current [AuthState]
   AuthState get state => super.value;
 
-  static List<AuthState> states = [];
-
   @protected
   set state(AuthState newValue) {
-    states.add(newValue);
     super.value = newValue;
   }
 
