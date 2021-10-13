@@ -132,15 +132,17 @@ void main() {
     expect(hashedBytes.length, equals(outputLength));
   }
 
-  group('argon2 hash', () {
-    for (final config in hashingConfigs) {
-      expect(
-        () => genericHashTest(
-          config: config,
-          hashFn: argon2Hash,
-        ),
-        config is Argon2SecretConfig ? returnsNormally : throwsA(anything),
-      );
-    }
+  group('argon2', () {
+    test('hash would run if config is correct', () {
+      for (final config in hashingConfigs) {
+        expect(
+          () => genericHashTest(
+            config: config,
+            hashFn: argon2Hash,
+          ),
+          config is Argon2SecretConfig ? returnsNormally : throwsA(anything),
+        );
+      }
+    });
   });
 }
