@@ -1,8 +1,6 @@
 @startuml flow 
 skinparam dpi 200
 
-title Follow Space
-
 start
 
 :Fetch/Create ""SubsocialAuth"" instance;
