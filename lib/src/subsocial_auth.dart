@@ -30,7 +30,8 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
   final int _encryptionKeyLength;
 
   /// Creates [SubsocialAuth].
-  SubsocialAuth(
+  @visibleForTesting
+  SubsocialAuth.internal(
     this._sdk,
     this._crypto,
     this._derivationStrategy,
@@ -42,7 +43,7 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
 
   /// Creates a [SubsocialAuth] with the default configuration.
   static Future<SubsocialAuth> defaultConfiguration({
-    Subsocial? sdk,
+    required Subsocial sdk,
     Crypto? crypto,
     KeyDerivationStrategy? derivationStrategy,
     AuthAccountStore? accountStore,
@@ -50,7 +51,6 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
     AccountSecretFactory? accountSecretFactory,
     int? encryptionKeyLength,
   }) async {
-    final _sdk = sdk ?? (await Subsocial.instance);
     final _crypto = crypto ?? Crypto();
     final _derivationStrategy =
         derivationStrategy ?? KeyDerivationStrategy(_crypto);
@@ -63,16 +63,17 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
 
     final _secretStore = secretStore ?? SecureAccountSecretStore();
 
+    final _encryptionKeyLength = encryptionKeyLength ?? 32;
+
     final _accountSecretFactory = accountSecretFactory ??
         AccountSecretFactory(
           _crypto,
           _derivationStrategy,
+          encryptionKeyLength: _encryptionKeyLength,
         );
 
-    final _encryptionKeyLength = encryptionKeyLength ?? 32;
-
-    return SubsocialAuth(
-      _sdk,
+    return SubsocialAuth.internal(
+      sdk,
       _crypto,
       _derivationStrategy,
       _accountStore,
