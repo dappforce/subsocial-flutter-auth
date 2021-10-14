@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:flutter/foundation.dart' show visibleForTesting;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:subsocial_flutter_auth/src/account_secret_store.dart';
-import 'package:subsocial_flutter_auth/src/models/account_secret.dart';
+import 'package:subsocial_auth/src/account_secret_store.dart';
+import 'package:subsocial_auth/src/models/account_secret.dart';
 
 const _keyPrefix = 'subsocial_auth_secrets:';
 

@@ -1,7 +1,7 @@
 import 'dart:typed_data';
 
-import 'package:subsocial_flutter_auth/src/crypto.dart';
-import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_auth/src/crypto.dart';
+import 'package:subsocial_auth/src/models/crypto_parameters.dart';
 
 /// [KeyDerivationStrategy] provides a method to drive encryption keys.
 class KeyDerivationStrategy {

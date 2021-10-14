@@ -1,6 +1,6 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
+import 'package:subsocial_auth/src/models/auth_account.dart';
 
 /// [AuthState] represents the current state of stored account and the current account.
 @immutable

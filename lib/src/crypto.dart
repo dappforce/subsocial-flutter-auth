@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart' show compute, visibleForTesting;
 import 'package:pointycastle/key_derivators/argon2.dart'
     show Argon2BytesGenerator;
 import 'package:pointycastle/pointycastle.dart' show Argon2Parameters;
-import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
-import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
+import 'package:subsocial_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_auth/src/models/secret_config.dart';
 
 /// [Crypto] class contains cryptographic operations used in this package.
 /// All operations are done in another isolate to not block the UI isolate.

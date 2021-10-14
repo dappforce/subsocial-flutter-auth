@@ -3,8 +3,8 @@ import 'dart:typed_data';
 
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
-import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
+import 'package:subsocial_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_auth/src/models/secret_config.dart';
 
 Uint8List _rndb(int length) => SecureRandom(length).bytes;
 

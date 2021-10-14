@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart';
-import 'package:subsocial_flutter_auth/src/models/account_secret.dart';
-import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
+import 'package:subsocial_auth/src/models/account_secret.dart';
+import 'package:subsocial_auth/src/models/secret_config.dart';
 
 /// [AuthAccount] represents an account
 @immutable

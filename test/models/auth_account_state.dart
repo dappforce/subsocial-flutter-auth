@@ -1,7 +1,7 @@
 //ignore_for_file: prefer_const_constructors
 import 'package:flutter_test/flutter_test.dart';
-import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
-import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
+import 'package:subsocial_auth/src/models/auth_account.dart';
+import 'package:subsocial_auth/src/models/secret_config.dart';
 
 import '../mocks.dart';
 

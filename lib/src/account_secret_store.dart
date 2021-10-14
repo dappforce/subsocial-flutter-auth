@@ -1,4 +1,4 @@
-import 'package:subsocial_flutter_auth/src/models/account_secret.dart';
+import 'package:subsocial_auth/src/models/account_secret.dart';
 
 /// Provides a storage for [AccountSecret].
 abstract class AccountSecretStore {

@@ -2,8 +2,8 @@ import 'dart:typed_data';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/foundation.dart' show immutable;
-import 'package:subsocial_flutter_auth/src/crypto.dart';
-import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
+import 'package:subsocial_auth/src/crypto.dart';
+import 'package:subsocial_auth/src/models/secret_config.dart';
 
 /// Parameters used in [Crypto.hash]
 @immutable

@@ -4,9 +4,9 @@ import 'package:collection/collection.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
-import 'package:subsocial_flutter_auth/src/auth_account_store.dart';
-import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
-import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
+import 'package:subsocial_auth/src/auth_account_store.dart';
+import 'package:subsocial_auth/src/models/auth_account.dart';
+import 'package:subsocial_auth/src/models/secret_config.dart';
 
 /// [SembastAuthAccountStore] stores accounts and the current account on disk
 /// using sembast package.

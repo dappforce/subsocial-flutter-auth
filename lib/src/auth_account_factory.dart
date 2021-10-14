@@ -1,11 +1,11 @@
 import 'dart:convert';
 import 'dart:typed_data';
 
-import 'package:subsocial_flutter_auth/src/crypto.dart';
-import 'package:subsocial_flutter_auth/src/key_derivation_strategy.dart';
-import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
-import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
-import 'package:subsocial_flutter_auth/src/utils.dart';
+import 'package:subsocial_auth/src/crypto.dart';
+import 'package:subsocial_auth/src/key_derivation_strategy.dart';
+import 'package:subsocial_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_auth/src/models/secret_config.dart';
+import 'package:subsocial_auth/src/utils.dart';
 
 import 'models/account_secret.dart';
 

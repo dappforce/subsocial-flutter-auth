@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:subsocial_flutter_auth/src/secure_account_secret_store.dart';
+import 'package:subsocial_auth/src/secure_account_secret_store.dart';
 
 import 'mocks.dart';
 

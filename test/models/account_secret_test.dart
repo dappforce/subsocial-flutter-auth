@@ -1,6 +1,6 @@
 import 'package:encrypt/encrypt.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:subsocial_flutter_auth/src/models/account_secret.dart';
+import 'package:subsocial_auth/src/models/account_secret.dart';
 
 void main() {
   test('==/hashCode', () {

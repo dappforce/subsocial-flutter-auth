@@ -1,4 +1,4 @@
-library subsocial_flutter_auth;
+library subsocial_auth;
 
 export 'src/auth_account_factory.dart';
 export 'src/auth_account_store.dart';

@@ -7,11 +7,11 @@ import 'package:collection/collection.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:sembast/sembast.dart';
-import 'package:subsocial_flutter_auth/src/account_secret_store.dart';
-import 'package:subsocial_flutter_auth/src/models/auth_account.dart';
-import 'package:subsocial_flutter_auth/src/models/crypto_parameters.dart';
-import 'package:subsocial_flutter_auth/src/secure_account_secret_store.dart';
-import 'package:subsocial_flutter_auth/src/subsocial_auth.dart';
+import 'package:subsocial_auth/src/account_secret_store.dart';
+import 'package:subsocial_auth/src/models/auth_account.dart';
+import 'package:subsocial_auth/src/models/crypto_parameters.dart';
+import 'package:subsocial_auth/src/secure_account_secret_store.dart';
+import 'package:subsocial_auth/src/subsocial_auth.dart';
 import 'package:subsocial_sdk/generated/def.pb.dart';
 
 import 'mocks.dart';
