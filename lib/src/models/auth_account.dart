@@ -6,7 +6,9 @@ import 'package:subsocial_flutter_auth/src/models/secret_config.dart';
 /// [AuthAccount] represents an account
 @immutable
 class AuthAccount {
+  /// {@template AuthAccount.localName}
   /// A name that used only locally to identify the account.
+  /// {@endtemplate}
   final String localName;
 
   /// The public key of this account.

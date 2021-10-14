@@ -111,8 +111,15 @@ class SubsocialAuth extends ValueNotifier<AuthState> {
 
   /// Import account and adds to the store.
   Future<AuthAccount> importAccount({
+    /// {@macro AuthAccount.localName}
     required String localName,
+
+    /// Substrate Uri used to import the account.
+    ///
+    /// For more info please visit https://polkadot.js.org/docs/keyring/start/suri/
     required String suri,
+
+    /// Password used to encrypt the suri when saved on device.
     required String password,
   }) async {
     final importedAccount = await _sdk.importAccount(suri: suri);
