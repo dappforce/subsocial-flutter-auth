@@ -2,3 +2,4 @@
 	path = packages/subsocial_sdk
 	url = https://github.com/dappforce/subsocial-flutter.git
 	branch = signer
+	ignore = dirty
