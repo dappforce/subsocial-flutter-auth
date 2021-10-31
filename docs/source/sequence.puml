@@ -1,0 +1,111 @@
+@startuml create_account
+skinparam dpi 200
+
+
+title Account Creation
+
+
+actor Application
+
+participant SubsocialAuth order 0
+participant SDK order 10
+participant AccountSecretFactory order 20
+participant KeyDerivationStrategy order 30
+participant Crypto order 40
+database AuthAccountStore order 50
+database AccountSecretStore order 60
+
+group Generate Account
+    Application -> SubsocialAuth : ""generateMnemonic()""
+
+    SubsocialAuth -> SDK : ""generateAccount()""
+
+    SDK --> SubsocialAuth : ""GeneratedAccount""
+
+    SubsocialAuth --> Application : ""List<String>""
+end
+
+group Import Account
+    Application -> SubsocialAuth : ""importAccount(""\n  ""name, suri, pass""\n"")""
+
+    SubsocialAuth -> SDK : ""importAccount(suri)""
+
+    SDK --> SubsocialAuth : ""ImportedAccount""
+
+    SubsocialAuth -> SubsocialAuth : Create\n""AccountSecretConfig.defaultConfig()""
+
+    SubsocialAuth -> SubsocialAuth : Create AuthAccount
+
+    SubsocialAuth -> AccountSecretFactory : ""createFromPlainString(config, pass, suri)""
+
+    AccountSecretFactory -> AccountSecretFactory : ""createFromPlainBytes(""\n""config, pass, suri""\n"")""
+
+    AccountSecretFactory -> KeyDerivationStrategy : ""driveKey(pass, config, ...)""
+
+    KeyDerivationStrategy --> AccountSecretFactory : ""Key""
+
+    AccountSecretFactory -> Crypto : ""encrypt(suri, key, config, ...)""
+
+    Crypto --> AccountSecretFactory : Encrypted Suri
+
+    AccountSecretFactory -> Crypto : ""hash(password, config, ...)""
+
+    Crypto --> AccountSecretFactory : Hashed Password
+
+
+    AccountSecretFactory --> SubsocialAuth : ""AccountSecret""
+
+
+    SubsocialAuth -> AuthAccountStore : ""addAccount(acc)""
+    SubsocialAuth -> AccountSecretStore : ""addSecret(acc.pubKey, secret)""
+
+    SubsocialAuth -> SubsocialAuth : ""update()""\nUpdates state and notify listeners
+
+    SubsocialAuth --> Application : ""AuthAccount""
+end
+
+@enduml
+
+@startuml set_signer
+
+skinparam dpi 200
+
+
+title Set Signer
+
+
+actor Application
+
+participant SubsocialAuth order 0
+participant SDK order 10
+participant KeyDerivationStrategy order 30
+participant Crypto order 40
+database AccountSecretStore order 60
+
+Application -> SubsocialAuth : ""setSigner(acc, password)""
+
+
+group Verify Password
+    SubsocialAuth -> SubsocialAuth : ""verifyPassword(acc, password)""
+    SubsocialAuth -> AccountSecretStore : ""getSecret(acc.pubKey)""
+    AccountSecretStore --> SubsocialAuth : ""AccountSecret""
+    SubsocialAuth -> Crypto : ""verifyHash(pass, expected, config, ...)""
+    Crypto --> SubsocialAuth : ""boolean"" (if hash match)
+end
+
+group ""_decryptSuri""
+
+    SubsocialAuth -> SubsocialAuth : ""_decryptSuri(acc, pass)""
+    SubsocialAuth -> AccountSecretStore : ""getSecret(acc.pubKey)""
+    AccountSecretStore --> SubsocialAuth : ""AccountSecret""
+    SubsocialAuth -> KeyDerivationStrategy : ""driveKey(pass, config, ...)""
+    KeyDerivationStrategy --> SubsocialAuth : ""Key""
+    SubsocialAuth -> Crypto : ""decrypt(encryptedSuri, key, config, ...)""
+    Crypto --> SubsocialAuth : ""suri""
+end
+
+SubsocialAuth -> SDK : ""importAccount(suri)""
+
+SubsocialAuth --> Application : ""boolean"" (if signer was set)
+
+@enduml

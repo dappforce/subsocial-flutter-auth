@@ -1,3 +1,9 @@
+packages/subsocial/
+.flutter-plugins
+.flutter-plugins-dependencies
+test_data/
+coverage/
+
 # See https://www.dartlang.org/guides/libraries/private-files
 
 # Files and directories created by pub
@@ -19,3 +25,12 @@ doc/api/
 *.js_
 *.js.deps
 *.js.map
+
+# IntelliJ
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Mac
+.DS_Store

@@ -1,0 +1,25 @@
+@startuml flow 
+skinparam dpi 200
+
+start
+
+:Fetch/Create ""SubsocialAuth"" instance;
+
+if (current user) then (null)
+  :prompt user to select an account
+  or create/import a new account;
+else (not null)
+endif
+
+if (is current signer is equal to current user?) then (no)
+  :prompt user to input his/her password;
+  :call ""SubsocialAuth.setSigner(acc, pass);"";
+else (yes)
+endif
+
+:Send the transaction using the sdk
+e.g ""sdk.followSpace(spaceId: spaceId);"";
+
+stop
+
+@enduml

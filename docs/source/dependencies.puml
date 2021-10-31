@@ -1,0 +1,16 @@
+@startuml dependencies
+skinparam dpi 200
+
+package "Subsocial Auth" as auth {}
+
+package "Subsocial SDK" as sdk {}
+
+package "Application" as app {}
+
+app ..> sdk
+
+app ..> auth
+
+auth ..> sdk
+
+@enduml
